@@ -241,7 +241,7 @@
             </div>
         </nav>
 
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 max-w-4xl pt-20"> <!-- Added pt-20 to account for fixed header -->
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 max-w-6xl pt-20"> <!-- Changed max-w-4xl to max-w-6xl -->
             <header class="text-center mb-12 mt-8"> <!-- Added mt-8 for more space -->
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight tracking-tight drop-shadow-lg">
                     <span class="bg-gradient-to-r from-teal-500 to-blue-600 text-transparent bg-clip-text">My Professional Portfolio</span>
@@ -399,7 +399,7 @@
             <section id="contact" class="section-card">
                 <h2 class="section-title-gradient text-center mb-4">Contact Me</h2>
                 <p class="text-slate-700 mb-6">I am always open to discussing new opportunities and collaborations. Please feel free to connect with me:</p>
-                <ul class="space-y-3 text-slate-700">
+                <ul class="space-y-3 text-slate-700 mb-6">
                     <li class="flex items-center">
                         <span class="text-2xl mr-2">📧</span> <strong class="font-semibold">Email:</strong> <a href="mailto:badar.ee9086@gmail.com" class="text-teal-600 hover:underline">badar.ee9086@gmail.com</a>
                     </li>
@@ -411,6 +411,12 @@
                     </li>
                     
                 </ul>
+                <button id="download-cv-btn" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors">
+                    <svg class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M.5 8a.5.5 0 01.5.5v1.5a.5.5 0 00.5.5h14a.5.5 0 00.5-.5V8.5a.5.5 0 011 0v1.5a1.5 1.5 0 01-1.5 1.5h-14A1.5 1.5 0 010 10V8.5a.5.5 0 01.5-.5zM12 3.5a.5.5 0 01.5.5v3.793l1.146-1.147a.5.5 0 01.708.708l-2 2a.5.5 0 01-.708 0l-2-2a.5.5 0 01.708-.708L11.5 7.793V4a.5.5 0 01.5-.5z" clip-rule="evenodd" />
+                    </svg>
+                    Download CV
+                </button>
             </section>
 
             <footer class="text-center text-slate-500 text-sm mt-12">
@@ -434,14 +440,15 @@
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
         // Profile photo data (can be extended if you have multiple photos or descriptions)
         const profilePhotoData = {
-            src: '.badar_e_alam.png',
+            src: './badar_e_alam.png',
             alt: 'Badar e Alam Profile Picture'
         };
 
-        // Project data (updated with your two new projects)
+        // Project data (updated to only include the first three)
         const projects = [
             {
                 id: 'hydro-turbine',
@@ -457,7 +464,7 @@
                 impact: 'Successfully demonstrated a viable approach to small-scale, portable hydro power, showcasing strong skills in both electrical and mechanical design for embedded applications.',
                 tags: ['PCB Design', '3D Design', 'KiCad', 'Fusion 360', 'Hardware'],
                 media: {
-                    images: ['hydro_tubine_1.PNG', 'hydro_turbine_2.PNG','hydro_tubine_3.PNG','hydro_tubine_4.PNG','hydro_tubine_5.PNG','hydro_tubine_6.PNG','hydro_tubine_7.PNG'], // Placeholder images
+                    images: ['./hydro_tubine_1.png', './hydro_turbine_2.png','./hydro_tubine_3.png','./hydro_tubine_4.png','./hydro_tubine_5.png','./hydro_tubine_6.png','./hydro_tubine_7.png'], // Placeholder images
                    // videos: ['./videos/hydro_turbine_demo.mp4'] // Placeholder video
                 }
             },
@@ -479,7 +486,7 @@
                 impact: 'Created a practical and cost-effective solution for predictive maintenance in industrial settings, significantly reducing potential equipment failures and operational costs.',
                 tags: ['AI', 'Machine Learning', 'C++', 'C', 'Python', 'Arduino Nano', 'Real-time Systems', 'IoT'],
                 media: {
-                    images: ['motor_fault_1.PNG', 'motor_fault_2.PNG'], // Placeholder images
+                    images: ['./motor_fault_1.png', './motor_fault_2.png'], // Placeholder images
                     //videos: ['./videos/motor_fault_demo.mp4'] // Placeholder video
                 }
             },
@@ -634,7 +641,7 @@
         const modal = document.getElementById('project-modal');
         const modalTitle = document.getElementById('modal-title');
         const modalBody = document.getElementById('modal-body');
-        const modalCloseBtn = document = document.getElementById('modal-close-btn');
+        const modalCloseBtn = document.getElementById('modal-close-btn'); // Corrected assignment
 
         function renderProjects() {
             projectsGrid.innerHTML = '';
@@ -883,9 +890,123 @@ Please provide a summary of approximately 100-150 words.`;
 
             // Start the transition to show the main content
             showMainContent();
+
+            // Add event listener for Download CV button
+            document.getElementById('download-cv-btn').addEventListener('click', generateCV);
         });
+
+        // Placeholder function for CV generation
+        function generateCV() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            let yPos = 20;
+            const margin = 20;
+            const lineHeight = 7;
+            const sectionSpacing = 10;
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(24);
+            doc.text("Badar e Alam", margin, yPos);
+            yPos += lineHeight;
+
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(12);
+            doc.text("Electrical Engineer", margin, yPos);
+            yPos += lineHeight * 2;
+
+            // Contact Info
+            doc.setFontSize(10);
+            doc.text(`Email: badar.ee9086@gmail.com`, margin, yPos);
+            yPos += lineHeight;
+            doc.text(`LinkedIn: https://www.linkedin.com/in/badarealam/`, margin, yPos);
+            yPos += lineHeight;
+            doc.text(`GitHub: https://github.com/badarealam`, margin, yPos);
+            yPos += sectionSpacing * 2;
+
+            // Helper to add section title
+            const addSectionTitle = (title) => {
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(16);
+                doc.text(title, margin, yPos);
+                yPos += lineHeight;
+                doc.line(margin, yPos, doc.internal.pageSize.width - margin, yPos); // Underline
+                yPos += lineHeight;
+            };
+
+            // Helper to add text with word wrapping and page breaks
+            const addText = (text, isListItem = false) => {
+                const splitText = doc.splitTextToSize(text, doc.internal.pageSize.width - 2 * margin);
+                splitText.forEach(line => {
+                    if (yPos + lineHeight > doc.internal.pageSize.height - margin) {
+                        doc.addPage();
+                        yPos = margin;
+                    }
+                    doc.text(line, margin + (isListItem ? 5 : 0), yPos);
+                    yPos += lineHeight;
+                });
+            };
+
+            // About Me
+            addSectionTitle("About Me");
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(10);
+            addText(document.querySelector('#about p:nth-of-type(1)').textContent);
+            addText(document.querySelector('#about p:nth-of-type(2)').textContent);
+            yPos += sectionSpacing;
+
+            // Skills & Expertise
+            addSectionTitle("Skills & Expertise");
+            doc.setFontSize(10);
+            addText("Core Competencies:");
+            coreSkillsData.forEach(skill => {
+                addText(`• ${skill.name} ${skill.details || ''}`, true);
+            });
+            yPos += lineHeight / 2;
+            addText("Soft Skills:");
+            softSkillsData.forEach(skill => {
+                addText(`• ${skill.name}`, true);
+            });
+            yPos += sectionSpacing;
+
+            // Professional Experience
+            addSectionTitle("Professional Experience");
+            doc.setFontSize(10);
+            document.querySelectorAll('#experience .experience-item').forEach(item => {
+                doc.setFont("helvetica", "bold");
+                addText(item.querySelector('h3').textContent);
+                doc.setFont("helvetica", "normal");
+                addText(item.querySelector('.experience-content').textContent.trim());
+                yPos += lineHeight; // Small space between experience items
+            });
+            yPos += sectionSpacing;
+
+            // Education
+            addSectionTitle("Education");
+            doc.setFontSize(10);
+            document.querySelectorAll('#education .education-item').forEach(item => {
+                doc.setFont("helvetica", "bold");
+                addText(item.querySelector('h3').textContent);
+                doc.setFont("helvetica", "normal");
+                addText(item.querySelector('.education-content').textContent.trim());
+                yPos += lineHeight;
+            });
+            yPos += sectionSpacing;
+
+            // Publications & Thesis
+            addSectionTitle("Publications & Thesis");
+            doc.setFontSize(10);
+            document.querySelectorAll('#publications .publication-item').forEach(item => {
+                doc.setFont("helvetica", "bold");
+                addText(item.querySelector('h3').textContent);
+                doc.setFont("helvetica", "normal");
+                addText(item.querySelector('.publication-content').textContent.trim());
+                yPos += lineHeight;
+            });
+            yPos += sectionSpacing;
+
+            doc.save('Badar_e_Alam_CV.pdf');
+        }
     </script>
 </body>
 </html>
-
-
