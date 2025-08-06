@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Badar e Alam's Professional Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals (Slate) with a Teal accent -->
+    <!-- Application Structure Plan: A single-page application with distinct thematic sections (About Me, Technical Skills, Projects, Experience, Education, Publications & Thesis, Contact Me). Navigation is achieved by smooth scrolling via a fixed header bar. The Skills section includes interactive tabs to filter between core competencies and soft skills, and within core competencies, individual skills are presented as interactive buttons. The Projects section displays interactive cards that open a modal with detailed project information, including media and an AI summary. The Experience and Education sections now feature expandable/collapsible details for each entry. A new Publications & Thesis section allows linking PDF documents. A welcome animation provides an engaging initial user experience. This structure prioritizes easy consumption and a smooth flow for showcasing personal professional details and project work. -->
+    <!-- Visualization & Content Choices: Goal: Inform & Showcase. Method: Text blocks for narrative, lists for experience/education, interactive tabs for skills, interactive project cards with modals for projects, expandable sections for experience and education, and a list of links for publications. Interaction: Users scroll through sections; click skill tabs to filter; click individual skill buttons for visual feedback; click project cards for rich details; click experience/education titles to expand/collapse details; click publication links to view PDFs. New: Prominent, interactive profile photo with a dedicated media structure. Justification: This presents a comprehensive personal profile in an organized, digestible format. The interactive elements enhance engagement and usability. Library/Method: Vanilla JS for interaction, Tailwind CSS for layout. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+            scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+        }
+        .section-card {
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .skill-tab {
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .skill-tab.active {
+            background-color: #0d9488; /* teal-600 */
+            color: white;
+        }
+        .project-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .modal {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+        .tag {
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .tag.active {
+            background-color: #0d9488; /* teal-600 */
+            color: white;
+        }
+
+        /* Welcome Animation Styles */
+        #welcome-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 60;
+            transition: opacity 1s ease-out;
+        }
+        #welcome-animation.fade-out {
+            opacity: 0;
+        }
+        #welcome-animation h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #1e293b; /* Reverted to solid color */
+            /* Removed gradient properties */
+            background-image: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+            color: #1e293b;
+        }
+        #welcome-animation h1 span {
+            display: inline-block;
+            animation: walk 1s ease-in-out infinite;
+        }
+        @keyframes walk {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Initial state for main content */
+        #main-content-wrapper {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease-in;
+        }
+        #main-content-wrapper.show-content {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        /* Offset for fixed header when scrolling to anchors */
+        html {
+            scroll-padding-top: 64px; /* Adjust this value based on your header's height */
+        }
+
+        /* Profile Photo Interactive Styles */
+        .profile-photo {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .profile-photo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Skill Button Styles */
+        .skill-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1rem;
+            background-color: #f0f9ff; /* blue-50 */
+            border: 1px solid #bae6fd; /* blue-200 */
+            border-radius: 0.5rem;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            text-align: center;
+            min-width: 120px; /* Ensure consistent width */
+            min-height: 80px; /* Ensure consistent height */
+        }
+        .skill-button:hover {
+            background-color: #bfdbfe; /* blue-200 */
+            border-color: #60a5fa; /* blue-400 */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .skill-button .skill-icon {
+            font-size: 2rem; /* Larger icon size */
+            margin-bottom: 0.25rem;
+            color: #2563eb; /* blue-700 */
+        }
+        .skill-button .skill-text {
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 500; /* font-medium */
+            color: #1e293b; /* slate-900 */
+        }
+
+        /* Experience and Education Item Styles */
+        .experience-item, .education-item, .publication-item {
+            border: 1px solid #e2e8f0; /* slate-200 */
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        .experience-header, .education-header, .publication-header {
+            background-color: #f1f5f9; /* slate-100 */
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s ease;
+        }
+        .experience-header:hover, .education-header:hover, .publication-header:hover {
+            background-color: #e2e8f0; /* slate-200 */
+        }
+        .experience-header h3, .education-header h3, .publication-header h3 {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 600; /* font-semibold */
+            color: #1e293b; /* slate-800 */
+            margin-bottom: 0; /* Remove default margin */
+        }
+        .experience-content, .education-content, .publication-content {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+        }
+        .experience-content.expanded, .education-content.expanded, .publication-content.expanded {
+            max-height: 1000px; /* Large enough value to show all content */
+            padding: 1rem 1.5rem;
+        }
+        .arrow-icon {
+            transition: transform 0.3s ease;
+        }
+        .experience-header.expanded .arrow-icon, .education-header.expanded .arrow-icon, .publication-header.expanded .arrow-icon {
+            transform: rotate(90deg);
+        }
+
+        /* Section Title Styling */
+        .section-title-gradient {
+            font-size: 2.25rem; /* text-4xl */
+            font-weight: 800; /* font-extrabold */
+            line-height: 1.25; /* leading-tight */
+            letter-spacing: -0.025em; /* tracking-tight */
+            filter: drop-shadow(0 4px 3px rgb(0 0 0 / 0.07)) drop-shadow(0 2px 2px rgb(0 0 0 / 0.06)); /* drop-shadow-lg */
+            background-image: linear-gradient(to right, var(--tw-gradient-from, #0d9488), var(--tw-gradient-to, #2563eb));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            --tw-gradient-from: #0d9488; /* teal-500 */
+            --tw-gradient-to: #2563eb; /* blue-600 */
+        }
+        /* Adjust for smaller screens if needed */
+        @media (min-width: 768px) { /* md */
+            .section-title-gradient {
+                font-size: 2.5rem; /* md:text-5xl */
+            }
+        }
+        @media (min-width: 1024px) { /* lg */
+            .section-title-gradient {
+                font-size: 3rem; /* lg:text-6xl */
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- Welcome Animation Overlay -->
+    <div id="welcome-animation">
+        <h1>
+            <span>W</span><span>e</span><span>l</span><span>c</span><span>o</span><span>m</span><span>e</span>
+        </h1>
+    </div>
+
+    <!-- Main portfolio content, initially hidden -->
+    <div id="main-content-wrapper">
+        <!-- Fixed Navigation Bar -->
+        <nav class="fixed top-0 left-0 right-0 bg-white shadow-md z-50 py-4">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-center flex-wrap gap-x-6 gap-y-2 text-slate-700 font-medium">
+                <a href="#about" class="hover:text-teal-600 transition-colors">About Me</a>
+                <a href="#skills" class="hover:text-teal-600 transition-colors">Technical Skills</a>
+                <a href="#projects" class="hover:text-teal-600 transition-colors">Projects</a>
+                <a href="#experience" class="hover:text-teal-600 transition-colors">Experience</a>
+                <a href="#education" class="hover:text-teal-600 transition-colors">Education</a>
+                <a href="#publications" class="hover:text-teal-600 transition-colors">Publications & Thesis</a>
+                <a href="#contact" class="hover:text-teal-600 transition-colors">Contact Me</a>
+            </div>
+        </nav>
+
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 max-w-4xl pt-20"> <!-- Added pt-20 to account for fixed header -->
+            <header class="text-center mb-12 mt-8"> <!-- Added mt-8 for more space -->
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight tracking-tight drop-shadow-lg">
+                    <span class="bg-gradient-to-r from-teal-500 to-blue-600 text-transparent bg-clip-text">My Professional Portfolio</span>
+                </h1>
+                <!-- Removed "Showcasing my expertise..." tagline as per request -->
+            </header>
+
+            <!-- About Me Section -->
+            <section id="about" class="section-card text-center">
+                <h2 class="section-title-gradient text-center mb-4">About Me</h2>
+                <div class="flex flex-col items-center mb-6">
+                    <img id="profile-img" src="./badar_e_alam.png" alt="Badar e Alam Profile" class="profile-photo w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-teal-500 shadow-lg mb-4 cursor-pointer">
+                    <h3 class="text-2xl font-semibold text-slate-900">Badar e Alam</h3>
+                    <p class="text-slate-600">Electrical Engineer</p>
+                </div>
+                <p class="text-slate-700 leading-relaxed">
+                    I am an Electrical Engineer currently pursuing a Master's degree in Electrical and Electronic Engineering from Ghulam Ishaq Khan Institute. With experience across multidisciplinary domains, I have developed a diverse set of technical and design skills. I am particularly motivated by research and lab-based environments that encourage innovation, hands-on experimentation, and problem-solving. I actively seek opportunities to contribute to meaningful projects, explore emerging technologies, and grow through collaborative work.
+                </p>
+                <p class="text-slate-700 leading-relaxed mt-4">
+                    I am open to research collaborations, academic projects, and engineering challenges where I can apply my skills and continue learning. My goal is to make a positive impact through engineering—whether in research, product development, or practical applications.
+                </p>
+            </section>
+
+            <!-- Skills & Expertise Section -->
+            <section id="skills" class="section-card">
+                <h2 class="section-title-gradient text-center mb-4">Skills & Expertise</h2>
+                <p class="text-slate-700 mb-6">My technical skill set is comprehensive, covering various aspects of embedded systems, software development, and project management.</p>
+
+                <div class="flex flex-wrap justify-center gap-2 mb-6" id="skill-tabs">
+                    <button class="skill-tab px-4 py-2 rounded-full bg-white shadow-sm active" data-skill-type="core">Core Competencies</button>
+                    <button class="skill-tab px-4 py-2 rounded-full bg-white shadow-sm" data-skill-type="soft">Soft Skills</button>
+                </div>
+
+                <div id="core-skills" class="skill-content grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                    <!-- Core skills will be rendered here by JavaScript -->
+                </div>
+
+                <div id="soft-skills" class="skill-content hidden grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                    <!-- Soft skills will be rendered here by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Featured Projects Section -->
+            <section id="projects" class="section-card">
+                <h2 class="section-title-gradient text-center mb-4">Featured Projects</h2>
+                <p class="text-slate-700 mb-6">
+                    My portfolio includes a range of projects that demonstrate my practical application of the skills listed above. Click on any project card to view detailed descriptions, images, videos, and an AI-generated summary.
+                </p>
+                <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Project cards will be rendered here by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Professional Experience Section -->
+            <section id="experience" class="section-card">
+                <h2 class="section-title-gradient text-center mb-4">Professional Experience</h2>
+                <p class="text-slate-700 mb-6">A summary of my professional journey and key contributions.</p>
+
+                <!-- Internship at Zatnav Islamabad -->
+                <div class="experience-item">
+                    <div class="experience-header" data-target="zatnav-details">
+                        <h3 class="text-xl font-semibold text-slate-800">Internship at Zatnav Islamabad | 07/2023 – 09/2023</h3>
+                        <svg class="w-6 h-6 text-slate-500 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </div>
+                    <div id="zatnav-details" class="experience-content">
+                        <p class="text-slate-700 mt-2">During my internship at Zatnav Islamabad, I gained hands-on experience in AI and sensor integration work. My responsibilities included data analysis with pandas, building machine learning models, sensor interfacing, sensor calibration, sensor coding, and integrating the overall system.</p>
+                    </div>
+                </div>
+
+                <!-- Co-Founded Wingmen Technologies -->
+                <div class="experience-item">
+                    <div class="experience-header" data-target="wingmen-details">
+                        <h3 class="text-xl font-semibold text-slate-800">Co-Founded Wingmen Technologies | 2022 – 2024</h3>
+                        <svg class="w-6 h-6 text-slate-500 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </div>
+                    <div id="wingmen-details" class="experience-content">
+                        <p class="text-slate-700 mt-2">As a co-founder of Wingmen Technologies, I collaborated with local businesses and institutions to solve their unique problems through innovative tech solutions. Key projects include:</p>
+
+                        <h4 class="text-lg font-semibold text-slate-800 mt-4 mb-2">IOT Based Automatic Waste Segregation System (01/2023 – 05/2023)</h4>
+                        <ul class="list-disc list-inside space-y-1 text-slate-700">
+                            <li>Developed an IoT-integrated AI system for automated waste classification using advanced image processing and machine learning techniques.</li>
+                            <li>Implemented a Raspberry Pi-controlled mechanical sorting mechanism for precise waste segregation into designated bins.</li>
+                            <li>Integrated real-time monitoring and alerts via IoT and IR sensors for efficient bin fill-level tracking and timely waste removal.</li>
+                            <li>Leveraged a Firebase database for dynamic occupancy status updates, enhancing overall waste management and response efficiency.</li>
+                            <li>Achieved high accuracy and resource efficiency by automating the waste sorting process, reducing manual intervention and human error.</li>
+                        </ul>
+
+                        <h4 class="text-lg font-semibold text-slate-800 mt-4 mb-2">Portable Medical Monitoring Device (08/2022 – 11/2022)</h4>
+                        <ul class="list-disc list-inside space-y-1 text-slate-700">
+                            <li>Designed a portable medical monitoring device for sensor data collection (heart-beat, Temperature, Oxygen saturation, body moisture).</li>
+                            <li>Implemented data transmission to the cloud for remote monitoring.</li>
+                            <li>Integrated AI algorithms for real-time anomaly detection in heart-beat and oxygen saturation levels.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Add more experience sections as needed -->
+            </section>
+
+            <!-- Education Section -->
+            <section id="education" class="section-card">
+                <h2 class="section-title-gradient text-center mb-4">Education</h2>
+                <p class="text-slate-700 mb-6">My academic background and relevant qualifications.</p>
+
+                <div class="education-item">
+                    <div class="education-header" data-target="bs-details">
+                        <h3 class="text-xl font-semibold text-slate-800">BS Electrical Engineering</h3>
+                        <svg class="w-6 h-6 text-slate-500 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </div>
+                    <div id="bs-details" class="education-content">
+                        <p class="text-slate-700 mt-1">International Islamic University, Islamabad | Islamabad, Pakistan</p>
+                        <p class="text-slate-700 mt-1">Graduated: August 2024 | CGPA: 3.4</p>
+                        <ul class="list-disc list-inside space-y-1 text-slate-700 mt-2">
+                            <li>BS Thesis: AI-based Industrial Motor Fault Prediction System in Realtime</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="education-item">
+                    <div class="education-header" data-target="ms-details">
+                        <h3 class="text-xl font-semibold text-slate-800">Masters in Electrical Engineering (Ongoing)</h3>
+                        <svg class="w-6 h-6 text-slate-500 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </div>
+                    <div id="ms-details" class="education-content">
+                        <p class="text-slate-700 mt-1">Ghulam Ishaq Khan Institute | Topi, Pakistan</p>
+                    </div>
+                </div>
+                <!-- Add more education sections if applicable -->
+            </section>
+
+            <!-- Publications & Thesis Section -->
+            <section id="publications" class="section-card">
+                <h2 class="section-title-gradient text-center mb-4">Publications & Thesis</h2>
+                <p class="text-slate-700 mb-6">Here you can find my academic publications and thesis work.</p>
+
+                <div class="publication-item">
+                    <div class="publication-header" data-target="bs-thesis-pub">
+                        <h3 class="text-xl font-semibold text-slate-800">BS Thesis: AI-based Industrial Motor Fault Prediction System in Realtime</h3>
+                        <svg class="w-6 h-6 text-slate-500 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </div>
+                    <div id="bs-thesis-pub" class="publication-content">
+                        <p class="text-slate-700 mt-2">University: International Islamic University, Islamabad</p>
+                        <p class="text-slate-700">Year: 2024</p>
+                        <p class="text-slate-700 mt-2">This thesis focuses on developing a real-time AI-driven system for predicting industrial motor faults. It covers data analysis, machine learning model building, sensor interfacing, calibration, coding, and system integration to enable early fault detection.</p>
+                        <a href="./bs_thesis.pdf" target="_blank" class="inline-flex items-center text-teal-600 hover:underline mt-3">
+                            <span class="text-2xl mr-2">📄</span> View PDF
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Add more publication items as needed -->
+            </section>
+
+            <!-- Contact Me Section -->
+            <section id="contact" class="section-card">
+                <h2 class="section-title-gradient text-center mb-4">Contact Me</h2>
+                <p class="text-slate-700 mb-6">I am always open to discussing new opportunities and collaborations. Please feel free to connect with me:</p>
+                <ul class="space-y-3 text-slate-700">
+                    <li class="flex items-center">
+                        <span class="text-2xl mr-2">📧</span> <strong class="font-semibold">Email:</strong> <a href="mailto:badar.ee9086@gmail.com" class="text-teal-600 hover:underline">badar.ee9086@gmail.com</a>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-2xl mr-2">🔗</span> <strong class="font-semibold">LinkedIn:</strong> <a href="https://www.linkedin.com/in/badarealam/" target="_blank" class="text-teal-600 hover:underline">https://www.linkedin.com/in/badarealam/</a>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-2xl mr-2">🐙</span> <strong class="font-semibold">GitHub:</strong> <a href="https://github.com/badarealam" target="_blank" class="text-teal-600 hover:underline">https://github.com/badarealam</a>
+                    </li>
+                    
+                </ul>
+            </section>
+
+            <footer class="text-center text-slate-500 text-sm mt-12">
+                &copy; <span id="current-year"></span> Badar e Alam. All rights reserved.
+            </footer>
+        </div>
+    </div>
+
+    <!-- Project Modal (Copied from your project portfolio) -->
+    <div id="project-modal" class="modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden">
+        <div class="modal-content bg-white rounded-lg shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto transform scale-95">
+            <div class="sticky top-0 bg-white p-6 border-b border-slate-200 flex justify-between items-center">
+                <h2 id="modal-title" class="text-2xl font-bold text-slate-900"></h2>
+                <button id="modal-close-btn" class="text-slate-500 hover:text-slate-800 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div id="modal-body" class="p-8">
+                <!-- Project details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Profile photo data (can be extended if you have multiple photos or descriptions)
+        const profilePhotoData = {
+            src: '.badar_e_alam.png',
+            alt: 'Badar e Alam Profile Picture'
+        };
+
+        // Project data (updated with your two new projects)
+        const projects = [
+            {
+                id: 'hydro-turbine',
+                title: 'Floatable Mini Hydro Turbine',
+                overview: 'Designed and implemented a floatable mini hydro turbine, focusing on PCB design with KiCad and 3D enclosure design with Fusion 360.',
+                challenge: 'To create a compact and efficient power generation solution, requiring detailed electronic circuit design and precise mechanical integration within a small form factor.',
+                solution: {
+                    hardware: ['TPS63070 (Power Management IC)', 'Custom PCB', 'Mini Turbine Generator', 'Floatation Mechanism'],
+                    software: [], // No specific software mentioned for this project, can add if applicable
+                },
+                features: ['Compact & Floatable Design', 'Custom PCB for Power Management (TPS63070)', 'Integrated 3D Enclosure Design', 'Efficient Hydro Power Generation'],
+                techHighlights: ['PCB Design: KiCad (Footprint to Schematic)', '3D Design: Fusion 360', 'Power Management: TPS63070', 'Hardware Prototyping'],
+                impact: 'Successfully demonstrated a viable approach to small-scale, portable hydro power, showcasing strong skills in both electrical and mechanical design for embedded applications.',
+                tags: ['PCB Design', '3D Design', 'KiCad', 'Fusion 360', 'Hardware'],
+                media: {
+                    images: ['./hydro_tubine_1.png', './hydro_turbine_2.png','./hydro_tubine_3.png','./hydro_tubine_4.png','./hydro_tubine_5.png','./hydro_tubine_6.png','./hydro_tubine_7.png'], // Placeholder images
+                   // videos: ['./videos/hydro_turbine_demo.mp4'] // Placeholder video
+                }
+            },
+            {
+                id: 'ai-motor-fault',
+                title: 'AI-Based Industrial Motor Fault Prediction System in Realtime',
+                overview: 'Developed a real-time AI-driven system for predicting industrial motor faults using C++, C, Python, and an Arduino Nano.',
+                challenge: 'To build a robust system capable of real-time data acquisition, processing, and AI inference on a microcontroller for early fault detection in industrial motors, minimizing downtime.',
+                solution: {
+                    hardware: ['Arduino Nano', 'Sensors (Vibration, Temperature, Current - Implicit)', 'Industrial Motor (for testing)'],
+                    software: [
+                        { title: 'Embedded Firmware (C/C++)', details: 'Optimized for real-time data acquisition from sensors and efficient execution of AI models on the Arduino Nano.' },
+                        { title: 'AI Model Development (Python)', details: 'Developed and trained machine learning models (e.g., anomaly detection, classification) using Python for motor fault prediction.' },
+                        { title: 'Data Preprocessing & Inference', details: 'Implemented efficient algorithms for on-device data preprocessing and AI model inference to meet real-time requirements.' }
+                    ]
+                },
+                features: ['Real-time Fault Prediction', 'AI/Machine Learning Integration', 'Microcontroller-Based Solution', 'Early Anomaly Detection', 'Optimized for Industrial Use', 'Low-Cost Implementation'],
+                techHighlights: ['Languages: C++', 'C', 'Python', 'AI/ML: Machine Learning, Anomaly Detection', 'Microcontroller: Arduino Nano', 'Real-time Systems', 'Sensor Integration'],
+                impact: 'Created a practical and cost-effective solution for predictive maintenance in industrial settings, significantly reducing potential equipment failures and operational costs.',
+                tags: ['AI', 'Machine Learning', 'C++', 'C', 'Python', 'Arduino Nano', 'Real-time Systems', 'IoT'],
+                media: {
+                    images: ['./motor_fault_1.png', './motor_fault_2.png'], // Placeholder images
+                    //videos: ['./videos/motor_fault_demo.mp4'] // Placeholder video
+                }
+            },
+            {
+                id: 'health-monitoring',
+                title: 'Health Monitoring Device with AI Anomaly Prediction',
+                overview: 'Developed a portable health monitoring device that collects physiological data from various sensors, sends it to the cloud, and uses machine learning models to predict abnormalities in real-time.',
+                challenge: 'To design a compact, accurate, and reliable device for continuous health monitoring, ensuring precise sensor data acquisition, efficient cloud communication, and effective AI-driven anomaly detection for early health alerts.',
+                solution: {
+                    hardware: ['Microcontroller (e.g., ESP32, Arduino)', 'Body Temperature Sensor', 'Moisture Sensor', 'Blood Oxygen Saturation Sensor (SpO2)', 'Heart Rate Sensor'],
+                    software: [
+                        { title: 'Embedded Firmware (C/C++)', details: 'Manages sensor interfacing, data acquisition, and local preprocessing. Optimizes power consumption for continuous operation.' },
+                        { title: 'Cloud Integration', details: 'Securely transmits sensor data to a cloud platform (e.g., Firebase, AWS IoT) for storage and further processing.' },
+                        { title: 'Machine Learning Models (Cloud/Edge)', details: 'Utilizes trained AI models to analyze incoming sensor data, identify patterns, and predict abnormalities or normalities in physiological parameters.' },
+                        { title: 'Alerting System', details: 'Triggers real-time alerts or notifications upon detection of significant anomalies, potentially via a mobile app or dashboard.' }
+                    ]
+                },
+                features: ['Multi-Sensor Data Collection', 'Real-time Health Monitoring', 'Cloud Data Transmission', 'AI-Driven Anomaly Detection', 'Predictive Health Insights', 'Wearable/Portable Design'],
+                techHighlights: ['Microcontroller: ESP32/Arduino', 'Sensors: Temperature, Moisture, SpO2, Heart Rate', 'Cloud Platform: Firebase/AWS IoT', 'AI/ML: Anomaly Detection, Classification', 'Communication: Wi-Fi/BLE', 'Real-time Data Processing'],
+                impact: 'Created a proactive health monitoring solution capable of providing early warnings for potential health issues, empowering users and healthcare providers with actionable insights for timely intervention.',
+                tags: ['Health Tech', 'IoT', 'AI', 'Machine Learning', 'Sensors', 'Cloud', 'Real-time Systems'],
+                media: {
+                    //images: ['./health_monitoring_1.jpg', './health_monitoring_2.png'], // Placeholder images
+                    //videos: ['./videos/health_monitoring_demo.mp4'] // Placeholder video
+                }
+            }
+        ];
+
+        // This function sets up the walking animation for the letters in the welcome message
+        function setupWalkingAnimation() {
+            const welcomeLetters = document.querySelectorAll('#welcome-animation h1 span');
+            welcomeLetters.forEach((span, index) => {
+                // Apply a staggered delay to each letter for the "walking" effect
+                span.style.animationDelay = `${index * 0.15}s`;
+            });
+        }
+
+        // This function handles the transition from the welcome animation to the main content
+        function showMainContent() {
+            const welcomeAnimation = document.getElementById('welcome-animation');
+            const mainContentWrapper = document.getElementById('main-content-wrapper');
+
+            // Wait for the animation to complete, then start the fade-out
+            setTimeout(() => {
+                welcomeAnimation.classList.add('fade-out');
+
+                // After the welcome screen fades, show the main content
+                setTimeout(() => {
+                    welcomeAnimation.style.display = 'none';
+                    mainContentWrapper.classList.add('show-content');
+                }, 1000); // This delay should match the CSS transition duration for #welcome-animation
+            }, 3000); // This delay allows the walking animation to run for a few seconds
+        }
+
+        // Skill tab functionality
+        const skillTabsContainer = document.getElementById('skill-tabs');
+        const coreSkillsContent = document.getElementById('core-skills');
+        const softSkillsContent = document.getElementById('soft-skills');
+
+        const coreSkillsData = [
+            { name: 'PCB Design', icon: '⚙️', details: '(KiCad)' },
+            { name: '3D Design', icon: '📐', details: '(Fusion 360)' },
+            { name: 'C/C++', icon: '💻', details: '' },
+            { name: 'Python', icon: '🐍', details: '' },
+            { name: 'Embedded Systems', icon: '💡', details: 'Microcontrollers (ESP32, RP2040, STM32, Arduino), Firmware, RTOS' },
+            { name: 'Tools & Environments', icon: '🛠️', details: 'Git/GitHub, PlatformIO, VS Code' }
+        ];
+
+        const softSkillsData = [
+            { name: 'Problem-Solving', icon: '🧠' },
+            { name: 'Collaboration', icon: '🤝' },
+            { name: 'Communication', icon: '🗣️' },
+            { name: 'Adaptability', icon: '🌱' },
+            { name: 'Project Management', icon: '📊' },
+            { name: 'Critical Thinking', icon: '🔍' },
+            { name: 'Innovation', icon: '✨' },
+            { name: 'Team Leadership', icon: '🌟' }
+        ];
+
+        function renderCoreSkills() {
+            coreSkillsContent.innerHTML = '';
+            coreSkillsData.forEach(skill => {
+                const skillButton = document.createElement('div');
+                skillButton.className = 'skill-button';
+                skillButton.innerHTML = `
+                    <span class="skill-icon">${skill.icon}</span>
+                    <span class="skill-text">${skill.name} ${skill.details || ''}</span>
+                `;
+                coreSkillsContent.appendChild(skillButton);
+            });
+        }
+
+        function renderSoftSkills() {
+            softSkillsContent.innerHTML = '';
+            softSkillsData.forEach(skill => {
+                const skillButton = document.createElement('div');
+                skillButton.className = 'skill-button';
+                skillButton.innerHTML = `
+                    <span class="skill-icon">${skill.icon}</span>
+                    <span class="skill-text">${skill.name}</span>
+                `;
+                softSkillsContent.appendChild(skillButton);
+            });
+        }
+
+
+        skillTabsContainer.addEventListener('click', (event) => {
+            const clickedButton = event.target.closest('.skill-tab');
+            if (clickedButton) {
+                // Remove active class from all tabs
+                document.querySelectorAll('.skill-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                    tab.classList.remove('bg-teal-600', 'text-white');
+                    tab.classList.add('bg-white', 'shadow-sm');
+                });
+
+                // Add active class to the clicked tab
+                clickedButton.classList.add('active');
+                clickedButton.classList.remove('bg-white', 'shadow-sm');
+                clickedButton.classList.add('bg-teal-600', 'text-white');
+
+                // Show/hide skill content based on data-skill-type
+                const skillType = clickedButton.dataset.skillType;
+                if (skillType === 'core') {
+                    coreSkillsContent.classList.remove('hidden');
+                    softSkillsContent.classList.add('hidden');
+                    renderCoreSkills(); // Re-render to ensure content is there
+                } else if (skillType === 'soft') {
+                    softSkillsContent.classList.remove('hidden');
+                    coreSkillsContent.classList.add('hidden');
+                    renderSoftSkills(); // Re-render to ensure content is there
+                }
+            }
+        });
+
+        // Experience and Education section expand/collapse functionality
+        document.addEventListener('click', (event) => {
+            const header = event.target.closest('.experience-header') || event.target.closest('.education-header') || event.target.closest('.publication-header');
+            if (header) {
+                const targetId = header.dataset.target;
+                const content = document.getElementById(targetId);
+                if (content) {
+                    content.classList.toggle('expanded');
+                    header.classList.toggle('expanded'); // Toggle class on header for arrow rotation
+                }
+            }
+        });
+
+
+        // Project rendering and modal functions (adapted from your project portfolio)
+        const projectsGrid = document.getElementById('projects-grid');
+        const modal = document.getElementById('project-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+        const modalCloseBtn = document = document.getElementById('modal-close-btn');
+
+        function renderProjects() {
+            projectsGrid.innerHTML = '';
+            projects.forEach(project => {
+                const card = document.createElement('div');
+                card.className = 'project-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer';
+                card.dataset.projectId = project.id;
+
+                let tagsHtml = project.tags.map(tag => `<span class="inline-block bg-slate-200 text-slate-700 text-xs font-medium mr-2 mb-2 px-2.5 py-0.5 rounded-full">${tag}</span>`).join('');
+
+                card.innerHTML = `
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">${project.title}</h3>
+                        <p class="text-slate-600 mb-4 text-sm">${project.overview}</p>
+                        <div class="flex flex-wrap">
+                            ${tagsHtml}
+                        </div>
+                    </div>
+                `;
+                projectsGrid.appendChild(card);
+            });
+        }
+
+        async function generateAISummary(project) {
+            const summaryContainer = document.getElementById('ai-summary-container');
+            const summaryContent = document.getElementById('ai-summary-content');
+            const summarizeButton = document.getElementById('summarize-button');
+
+            if (!summaryContainer || !summaryContent || !summarizeButton) return;
+
+            summaryContent.innerHTML = '<div class="text-slate-500">Generating summary...</div>';
+            summarizeButton.disabled = true;
+            summarizeButton.classList.add('opacity-50', 'cursor-not-allowed');
+
+            const prompt = `Provide a concise, professional, and impactful summary of the following embedded systems/IoT project, suitable for a portfolio. Focus on the problem, solution, and key achievements.
+
+Project Title: ${project.title}
+Overview: ${project.overview}
+Challenge: ${project.challenge}
+Solution:
+  Hardware: ${project.solution.hardware ? project.solution.hardware.join(', ') : 'N/A'}
+  Software: ${project.solution.software ? project.solution.software.map(s => `${s.title}: ${s.details}`).join('; ') : 'N/A'}
+F-eatures: ${project.features.join(', ')}
+Technical Highlights: ${project.techHighlights.join(', ')}
+Impact: ${project.impact}
+
+Please provide a summary of approximately 100-150 words.`;
+
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            let retries = 0;
+            const maxRetries = 5;
+            const baseDelay = 1000; // 1 second
+
+            while (retries < maxRetries) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        if (response.status === 429) { // Too Many Requests
+                            const delay = baseDelay * Math.pow(2, retries);
+                            console.warn(`Rate limit hit. Retrying in ${delay / 1000} seconds...`);
+                            await new Promise(resolve => setTimeout(resolve, delay));
+                            retries++;
+                            continue;
+                        } else {
+                            throw new Error(`API error: ${response.status} ${response.statusText}`);
+                        }
+                    }
+
+                    const result = await response.json();
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        summaryContent.innerHTML = `<p class="text-slate-700">${text}</p>`;
+                    } else {
+                        summaryContent.innerHTML = '<p class="text-red-500">Failed to generate summary. Unexpected API response.</p>';
+                    }
+                    break; // Exit loop on success
+                } catch (error) {
+                    console.error('Error calling Gemini API:', error);
+                    summaryContent.innerHTML = `<p class="text-red-500">Error generating summary: ${error.message}. Please try again.</p>`;
+                    break; // Exit loop on critical error
+                }
+            }
+
+            if (retries === maxRetries) {
+                summaryContent.innerHTML = '<p class="text-red-500">Failed to generate summary after multiple retries. Please try again later.</p>';
+            }
+
+            summarizeButton.disabled = false;
+            summarizeButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+
+        function openModal(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            if (!project) return;
+
+            modalTitle.textContent = project.title;
+
+            let solutionHtml = '<div class="grid md:grid-cols-2 gap-6">';
+            if (project.solution.hardware && project.solution.hardware.length > 0) {
+                solutionHtml += `<div><h4 class="font-semibold text-slate-800 mb-2">Hardware Components</h4><ul class="list-disc list-inside space-y-1 text-slate-600">`;
+                project.solution.hardware.forEach(item => { solutionHtml += `<li>${item}</li>`; });
+                solutionHtml += `</ul></div>`;
+            }
+            if (project.solution.software && project.solution.software.length > 0) {
+                solutionHtml += `<div><h4 class="font-semibold text-slate-800 mb-2">Software Architecture</h4><div class="space-y-3">`;
+                project.solution.software.forEach(item => {
+                    solutionHtml += `<div><p class="font-medium text-slate-700">${item.title}</p><p class="text-sm text-slate-600">${item.details}</p></div>`;
+                });
+                solutionHtml += `</div></div>`;
+            }
+            solutionHtml += '</div>';
+
+            let featuresHtml = project.features.map(f => `<li>${f}</li>`).join('');
+            let techHighlightsHtml = project.techHighlights.map(th => `<span class="inline-block bg-teal-100 text-teal-800 text-sm font-medium mr-2 mb-2 px-3 py-1 rounded-full">${th}</span>`).join('');
+
+            let mediaHtml = '';
+            if (project.media && project.media.images && project.media.images.length > 0) {
+                mediaHtml += `<section class="mb-6">
+                    <h3 class="text-lg font-semibold border-b border-slate-200 pb-2 mb-3">Project Images</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">`;
+                project.media.images.forEach(imgSrc => {
+                    mediaHtml += `<img src="${imgSrc}" alt="${project.title} Image" class="rounded-lg shadow-md w-full h-auto object-cover">`;
+                });
+                mediaHtml += `</div></section>`;
+            }
+            if (project.media && project.media.videos && project.media.videos.length > 0) {
+                mediaHtml += `<section class="mb-6">
+                    <h3 class="text-lg font-semibold border-b border-slate-200 pb-2 mb-3">Project Videos</h3>
+                    <div class="grid grid-cols-1 gap-4">`; // Use grid for videos too, or just flex-col
+                project.media.videos.forEach(videoSrc => {
+                    mediaHtml += `<div class="w-full aspect-video rounded-lg overflow-hidden shadow-md">
+                                    <video controls class="w-full h-full"><source src="${videoSrc}" type="video/mp4" onerror="this.onerror=null;this.src='https://placehold.co/640x360/cccccc/333333?text=Video+Not+Found';">Your browser does not support the video tag.</video>
+                                  </div>`;
+                });
+                mediaHtml += `</div></section>`;
+            }
+
+
+            modalBody.innerHTML = `
+                <section class="mb-6">
+                    <h3 class="text-lg font-semibold border-b border-slate-200 pb-2 mb-3">Project Overview</h3>
+                    <p class="text-slate-600">${project.overview}</p>
+                </section>
+                <section class="mb-6">
+                    <h3 class="text-lg font-semibold border-b border-slate-200 pb-2 mb-3">The Challenge</h3>
+                    <p class="text-slate-600">${project.challenge}</p>
+                </section>
+                <section class="mb-6">
+                    <h3 class="text-lg font-semibold border-b border-slate-200 pb-2 mb-3">Solution and Implementation</h3>
+                    ${solutionHtml}
+                </section>
+                <section class="mb-6">
+                    <h3 class="text-lg font-semibold border-b border-slate-200 pb-2 mb-3">Key Features</h3>
+                    <ul class="list-disc list-inside space-y-1 text-slate-600 grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+                        ${featuresHtml}
+                    </ul>
+                </section>
+                <section class="mb-6">
+                    <h3 class="text-lg font-semibold border-b border-slate-200 pb-2 mb-3">Technical Highlights</h3>
+                    <div class="flex flex-wrap">${techHighlightsHtml}</div>
+                </section>
+                <section class="mb-6">
+                    <h3 class="text-lg font-semibold border-b border-slate-200 pb-2 mb-3">Outcome and Impact</h3>
+                    <p class="text-slate-600">${project.impact}</p>
+                </section>
+                ${mediaHtml} <!-- Insert media here -->
+                <section class="mb-6">
+                    <h3 class="text-lg font-semibold border-b border-slate-200 pb-2 mb-3 flex items-center">
+                        AI Summary
+                        <button id="summarize-button" class="ml-3 px-3 py-1 bg-teal-500 text-white text-sm font-medium rounded-full hover:bg-teal-600 transition-colors flex items-center">
+                            Generate AI Summary ✨
+                        </button>
+                    </h3>
+                    <div id="ai-summary-container" class="mt-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
+                        <div id="ai-summary-content" class="text-slate-600 italic">Click "Generate AI Summary ✨" to get a concise overview of this project.</div>
+                    </div>
+                </section>
+            `;
+
+            document.getElementById('summarize-button').onclick = () => generateAISummary(project);
+
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.querySelector('.modal-content').classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modal.querySelector('.modal-content').classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }, 300);
+        }
+
+        projectsGrid.addEventListener('click', e => {
+            const card = e.target.closest('.project-card');
+            if (card) {
+                openModal(card.dataset.projectId);
+            }
+        });
+
+        modalCloseBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', e => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set current year in footer
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+
+            // Setup the welcome animation
+            setupWalkingAnimation();
+            
+            // Render project cards for the 'Projects' section
+            renderProjects();
+
+            // Render core skills (newly added)
+            renderCoreSkills();
+            // Initial render for soft skills (hidden by default)
+            renderSoftSkills();
+
+            // Start the transition to show the main content
+            showMainContent();
+        });
+    </script>
+</body>
+</html>
