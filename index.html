@@ -875,6 +875,14 @@ Please provide a summary of approximately 100-150 words.`;
             // Start the transition to show the main content
             showMainContent();
 
+            // Mobile menu toggle functionality
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const navigationLinks = document.getElementById('navigation-links');
+
+            mobileMenuButton.addEventListener('click', () => {
+                navigationLinks.classList.toggle('hidden');
+            });
+
             // Add event listener for Download CV button
             document.getElementById('download-cv-btn').addEventListener('click', generateCV);
         });
