@@ -192,7 +192,7 @@
 
         /* Section Title Styling */
         .section-title-gradient {
-            font-size: 2.25rem; /* text-4xl */
+            font-size: 1.875rem; /* text-3xl for mobile */
             font-weight: 800; /* font-extrabold */
             line-height: 1.25; /* leading-tight */
             letter-spacing: -0.025em; /* tracking-tight */
@@ -204,13 +204,18 @@
             --tw-gradient-from: #0d9488; /* teal-500 */
             --tw-gradient-to: #2563eb; /* blue-600 */
         }
-        /* Adjust for smaller screens if needed */
-        @media (min-width: 768px) { /* md */
+        /* Adjust for larger screens */
+        @media (min-width: 640px) { /* sm breakpoint */
+            .section-title-gradient {
+                font-size: 2.25rem; /* sm:text-4xl */
+            }
+        }
+        @media (min-width: 768px) { /* md breakpoint */
             .section-title-gradient {
                 font-size: 2.5rem; /* md:text-5xl */
             }
         }
-        @media (min-width: 1024px) { /* lg */
+        @media (min-width: 1024px) { /* lg breakpoint */
             .section-title-gradient {
                 font-size: 3rem; /* lg:text-6xl */
             }
@@ -230,14 +235,25 @@
     <div id="main-content-wrapper">
         <!-- Fixed Navigation Bar -->
         <nav class="fixed top-0 left-0 right-0 bg-white shadow-md z-50 py-4">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-center flex-wrap gap-x-6 gap-y-2 text-slate-700 font-medium">
-                <a href="#about" class="hover:text-teal-600 transition-colors">About Me</a>
-                <a href="#skills" class="hover:text-teal-600 transition-colors">Technical Skills</a>
-                <a href="#projects" class="hover:text-teal-600 transition-colors">Projects</a>
-                <a href="#experience" class="hover:text-teal-600 transition-colors">Experience</a>
-                <a href="#education" class="hover:text-teal-600 transition-colors">Education</a>
-                <a href="#publications" class="hover:text-teal-600 transition-colors">Publications & Thesis</a>
-                <a href="#contact" class="hover:text-teal-600 transition-colors">Contact Me</a>
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+                <!-- Logo/Name (Visible on all screens) -->
+                <a href="#about" class="text-xl font-bold text-slate-900 hover:text-teal-600 transition-colors">Badar e Alam</a>
+
+                <!-- Hamburger Menu Button (Visible on small screens) -->
+                <button id="mobile-menu-button" class="md:hidden text-slate-700 hover:text-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 rounded-md p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+
+                <!-- Navigation Links (Hidden on small screens, shown on medium and up) -->
+                <div id="navigation-links" class="hidden md:flex flex-col md:flex-row gap-x-6 gap-y-2 text-slate-700 font-medium absolute md:static top-full left-0 w-full md:w-auto bg-white md:bg-transparent shadow-md md:shadow-none py-4 md:py-0 px-4 md:px-0">
+                    <a href="#about" class="block py-2 md:py-0 hover:text-teal-600 transition-colors">About Me</a>
+                    <a href="#skills" class="block py-2 md:py-0 hover:text-teal-600 transition-colors">Technical Skills</a>
+                    <a href="#projects" class="block py-2 md:py-0 hover:text-teal-600 transition-colors">Projects</a>
+                    <a href="#experience" class="block py-2 md:py-0 hover:text-teal-600 transition-colors">Experience</a>
+                    <a href="#education" class="block py-2 md:py-0 hover:text-teal-600 transition-colors">Education</a>
+                    <a href="#publications" class="block py-2 md:py-0 hover:text-teal-600 transition-colors">Publications & Thesis</a>
+                    <a href="#contact" class="block py-2 md:py-0 hover:text-teal-600 transition-colors">Contact Me</a>
+                </div>
             </div>
         </nav>
 
@@ -257,10 +273,11 @@
                     <h3 class="text-2xl font-semibold text-slate-900">Badar e Alam</h3>
                     <p class="text-slate-600">Electrical Engineer</p>
                 </div>
-                <p class="text-slate-700 leading-relaxed">
+                <!-- Adjusted text alignment for better mobile readability -->
+                <p class="text-slate-700 leading-relaxed text-left md:text-center">
                     I am an Electrical Engineer currently pursuing a Master's degree in Electrical and Electronic Engineering from Ghulam Ishaq Khan Institute. With experience across multidisciplinary domains, I have developed a diverse set of technical and design skills. I am particularly motivated by research and lab-based environments that encourage innovation, hands-on experimentation, and problem-solving. I actively seek opportunities to contribute to meaningful projects, explore emerging technologies, and grow through collaborative work.
                 </p>
-                <p class="text-slate-700 leading-relaxed mt-4">
+                <p class="text-slate-700 leading-relaxed mt-4 text-left md:text-center">
                     I am open to research collaborations, academic projects, and engineering challenges where I can apply my skills and continue learning. My goal is to make a positive impact through engineering—whether in research, product development, or practical applications.
                 </p>
             </section>
@@ -275,11 +292,12 @@
                     <button class="skill-tab px-4 py-2 rounded-full bg-white shadow-sm" data-skill-type="soft">Soft Skills</button>
                 </div>
 
-                <div id="core-skills" class="skill-content grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                <!-- Adjusted grid columns for better mobile layout -->
+                <div id="core-skills" class="skill-content grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     <!-- Core skills will be rendered here by JavaScript -->
                 </div>
 
-                <div id="soft-skills" class="skill-content hidden grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                <div id="soft-skills" class="skill-content hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     <!-- Soft skills will be rendered here by JavaScript -->
                 </div>
             </section>
@@ -1010,4 +1028,3 @@ Please provide a summary of approximately 100-150 words.`;
     </script>
 </body>
 </html>
-
