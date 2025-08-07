@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Warm Neutrals (Slate) with a Teal accent -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -21,12 +20,6 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
             padding: 2rem;
             margin-bottom: 2rem;
-        }
-        /* Mobile-specific adjustments for padding */
-        @media (max-width: 639px) {
-            .section-card {
-                padding: 1rem;
-            }
         }
         .skill-tab {
             cursor: pointer;
@@ -78,7 +71,8 @@
         #welcome-animation h1 {
             font-size: 3rem;
             font-weight: 700;
-            color: #1e293b;
+            color: #1e293b; /* Reverted to solid color */
+            /* Removed gradient properties */
             background-image: none;
             -webkit-background-clip: unset;
             background-clip: unset;
@@ -105,7 +99,7 @@
         }
         /* Offset for fixed header when scrolling to anchors */
         html {
-            scroll-padding-top: 64px;
+            scroll-padding-top: 64px; /* Adjust this value based on your header's height */
         }
 
         /* Profile Photo Interactive Styles */
@@ -175,12 +169,6 @@
             color: #1e293b; /* slate-800 */
             margin-bottom: 0; /* Remove default margin */
         }
-        @media (max-width: 639px) { /* Adjust font size for mobile */
-            .experience-header h3, .education-header h3, .publication-header h3 {
-                font-size: 1rem;
-            }
-        }
-
         .experience-content, .education-content, .publication-content {
             padding: 0 1.5rem;
             max-height: 0;
@@ -191,11 +179,6 @@
             max-height: 1000px; /* Large enough value to show all content */
             padding: 1rem 1.5rem;
         }
-        @media (max-width: 639px) { /* Adjust padding for mobile */
-            .experience-content.expanded, .education-content.expanded, .publication-content.expanded {
-                padding: 0.5rem 1rem;
-            }
-        }
         .arrow-icon {
             transition: transform 0.3s ease;
         }
@@ -205,12 +188,11 @@
 
         /* Section Title Styling */
         .section-title-gradient {
-            /* Adjusted base font size for better mobile fit */
             font-size: 1.875rem; /* text-3xl for mobile */
-            font-weight: 800;
-            line-height: 1.25;
-            letter-spacing: -0.025em;
-            filter: drop-shadow(0 4px 3px rgb(0 0 0 / 0.07)) drop-shadow(0 2px 2px rgb(0 0 0 / 0.06));
+            font-weight: 800; /* font-extrabold */
+            line-height: 1.25; /* leading-tight */
+            letter-spacing: -0.025em; /* tracking-tight */
+            filter: drop-shadow(0 4px 3px rgb(0 0 0 / 0.07)) drop-shadow(0 2px 2px rgb(0 0 0 / 0.06)); /* drop-shadow-lg */
             background-image: linear-gradient(to right, var(--tw-gradient-from, #0d9488), var(--tw-gradient-to, #2563eb));
             -webkit-background-clip: text;
             background-clip: text;
@@ -238,27 +220,21 @@
 </head>
 <body class="text-slate-800">
 
-    <!-- Welcome Animation Overlay -->
     <div id="welcome-animation">
         <h1>
             <span>W</span><span>e</span><span>l</span><span>c</span><span>o</span><span>m</span><span>e</span>
         </h1>
     </div>
 
-    <!-- Main portfolio content, initially hidden -->
     <div id="main-content-wrapper">
-        <!-- Fixed Navigation Bar -->
         <nav class="fixed top-0 left-0 right-0 bg-white shadow-md z-50 py-4">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center relative">
-                <!-- Logo/Name (Visible on all screens) -->
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
                 <a href="#about" class="text-xl font-bold text-slate-900 hover:text-teal-600 transition-colors">Badar e Alam</a>
 
-                <!-- Hamburger Menu Button (Visible on small screens) -->
                 <button id="mobile-menu-button" class="md:hidden text-slate-700 hover:text-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 rounded-md p-2">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                 </button>
 
-                <!-- Navigation Links (Hidden by default, shown on md and up. Toggled by JS on mobile) -->
                 <div id="navigation-links" class="hidden md:flex flex-col md:flex-row gap-x-6 gap-y-2 text-slate-700 font-medium absolute md:static top-full left-0 w-full md:w-auto bg-white md:bg-transparent shadow-md md:shadow-none py-4 md:py-0 px-4 md:px-0">
                     <a href="#about" class="block py-2 md:py-0 hover:text-teal-600 transition-colors">About Me</a>
                     <a href="#skills" class="block py-2 md:py-0 hover:text-teal-600 transition-colors">Technical Skills</a>
@@ -271,15 +247,11 @@
             </div>
         </nav>
 
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 max-w-6xl pt-20">
-            <header class="text-center mb-12 mt-8">
-                <!-- Adjusted text size for mobile -->
-                <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight tracking-tight drop-shadow-lg">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 max-w-6xl pt-20"> <header class="text-center mb-12 mt-8"> <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight tracking-tight drop-shadow-lg">
                     <span class="bg-gradient-to-r from-teal-500 to-blue-600 text-transparent bg-clip-text">My Professional Portfolio</span>
                 </h1>
-            </header>
+                </header>
 
-            <!-- About Me Section -->
             <section id="about" class="section-card text-center">
                 <h2 class="section-title-gradient text-center mb-4">About Me</h2>
                 <div class="flex flex-col items-center mb-6">
@@ -295,7 +267,6 @@
                 </p>
             </section>
 
-            <!-- Skills & Expertise Section -->
             <section id="skills" class="section-card">
                 <h2 class="section-title-gradient text-center mb-4">Skills & Expertise</h2>
                 <p class="text-slate-700 mb-6">My technical skill set is comprehensive, covering various aspects of embedded systems, software development, and project management.</p>
@@ -305,36 +276,29 @@
                     <button class="skill-tab px-4 py-2 rounded-full bg-white shadow-sm" data-skill-type="soft">Soft Skills</button>
                 </div>
 
-                <!-- Adjusted grid columns for better mobile layout -->
                 <div id="core-skills" class="skill-content grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    <!-- Core skills will be rendered here by JavaScript -->
-                </div>
+                    </div>
 
                 <div id="soft-skills" class="skill-content hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    <!-- Soft skills will be rendered here by JavaScript -->
-                </div>
+                    </div>
             </section>
 
-            <!-- Featured Projects Section -->
             <section id="projects" class="section-card">
                 <h2 class="section-title-gradient text-center mb-4">Featured Projects</h2>
                 <p class="text-slate-700 mb-6">
                     My portfolio includes a range of projects that demonstrate my practical application of the skills listed above. Click on any project card to view detailed descriptions, images, videos, and an AI-generated summary.
                 </p>
                 <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Project cards will be rendered here by JavaScript -->
-                </div>
+                    </div>
             </section>
 
-            <!-- Professional Experience Section -->
             <section id="experience" class="section-card">
                 <h2 class="section-title-gradient text-center mb-4">Professional Experience</h2>
                 <p class="text-slate-700 mb-6">A summary of my professional journey and key contributions.</p>
 
-                <!-- Internship at Zatnav Islamabad -->
                 <div class="experience-item">
                     <div class="experience-header" data-target="zatnav-details">
-                        <h3>Internship at Zatnav Islamabad | 07/2023 – 09/2023</h3>
+                        <h3 class="text-xl font-semibold text-slate-800">Internship at Zatnav Islamabad | 07/2023 – 09/2023</h3>
                         <svg class="w-6 h-6 text-slate-500 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </div>
                     <div id="zatnav-details" class="experience-content">
@@ -342,10 +306,9 @@
                     </div>
                 </div>
 
-                <!-- Co-Founded Wingmen Technologies -->
                 <div class="experience-item">
                     <div class="experience-header" data-target="wingmen-details">
-                        <h3>Co-Founded Wingmen Technologies | 2022 – 2024</h3>
+                        <h3 class="text-xl font-semibold text-slate-800">Co-Founded Wingmen Technologies | 2022 – 2024</h3>
                         <svg class="w-6 h-6 text-slate-500 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </div>
                     <div id="wingmen-details" class="experience-content">
@@ -369,17 +332,15 @@
                     </div>
                 </div>
 
-                <!-- Add more experience sections as needed -->
-            </section>
+                </section>
 
-            <!-- Education Section -->
             <section id="education" class="section-card">
                 <h2 class="section-title-gradient text-center mb-4">Education</h2>
                 <p class="text-slate-700 mb-6">My academic background and relevant qualifications.</p>
 
                 <div class="education-item">
                     <div class="education-header" data-target="bs-details">
-                        <h3>BS Electrical Engineering</h3>
+                        <h3 class="text-xl font-semibold text-slate-800">BS Electrical Engineering</h3>
                         <svg class="w-6 h-6 text-slate-500 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </div>
                     <div id="bs-details" class="education-content">
@@ -393,24 +354,22 @@
 
                 <div class="education-item">
                     <div class="education-header" data-target="ms-details">
-                        <h3>Masters in Electrical Engineering (Ongoing)</h3>
+                        <h3 class="text-xl font-semibold text-slate-800">Masters in Electrical Engineering (Ongoing)</h3>
                         <svg class="w-6 h-6 text-slate-500 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </div>
                     <div id="ms-details" class="education-content">
                         <p class="text-slate-700 mt-1">Ghulam Ishaq Khan Institute | Topi, Pakistan</p>
                     </div>
                 </div>
-                <!-- Add more education sections if applicable -->
-            </section>
+                </section>
 
-            <!-- Publications & Thesis Section -->
             <section id="publications" class="section-card">
                 <h2 class="section-title-gradient text-center mb-4">Publications & Thesis</h2>
                 <p class="text-slate-700 mb-6">Here you can find my academic publications and thesis work.</p>
 
                 <div class="publication-item">
                     <div class="publication-header" data-target="bs-thesis-pub">
-                        <h3>BS Thesis: AI-based Industrial Motor Fault Prediction System in Realtime</h3>
+                        <h3 class="text-xl font-semibold text-slate-800">BS Thesis: AI-based Industrial Motor Fault Prediction System in Realtime</h3>
                         <svg class="w-6 h-6 text-slate-500 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </div>
                     <div id="bs-thesis-pub" class="publication-content">
@@ -423,24 +382,21 @@
                     </div>
                 </div>
 
-                <!-- Add more publication items as needed -->
-            </section>
+                </section>
 
-            <!-- Contact Me Section -->
-            <section id="contact" class="section-card">
+            <section id="contact" class="section-card flex flex-col items-center">
                 <h2 class="section-title-gradient text-center mb-4">Contact Me</h2>
-                <p class="text-slate-700 mb-6">I am always open to discussing new opportunities and collaborations. Please feel free to connect with me:</p>
+                <p class="text-slate-700 mb-6 text-center">I am always open to discussing new opportunities and collaborations. Please feel free to connect with me:</p>
                 <ul class="space-y-3 text-slate-700 mb-6">
                     <li class="flex items-center">
-                        <span class="text-2xl mr-2">📧</span> <strong class="font-semibold">Email:</strong> <a href="mailto:badar.ee9086@gmail.com" class="text-teal-600 hover:underline">badar.ee9086@gmail.com</a>
+                        <span class="text-2xl mr-2">📧</span> <strong class="font-semibold mr-1">Email:</strong> <a href="mailto:badar.ee9086@gmail.com" class="text-teal-600 hover:underline break-all">badar.ee9086@gmail.com</a>
                     </li>
                     <li class="flex items-center">
-                        <span class="text-2xl mr-2">🔗</span> <strong class="font-semibold">LinkedIn:</strong> <a href="https://www.linkedin.com/in/badarealam/" target="_blank" class="text-teal-600 hover:underline">https://www.linkedin.com/in/badarealam/</a>
+                        <span class="text-2xl mr-2">🔗</span> <strong class="font-semibold mr-1">LinkedIn:</strong> <a href="https://www.linkedin.com/in/badarealam/" target="_blank" class="text-teal-600 hover:underline break-all">https://www.linkedin.com/in/badarealam/</a>
                     </li>
                     <li class="flex items-center">
-                        <span class="text-2xl mr-2">🐙</span> <strong class="font-semibold">GitHub:</strong> <a href="https://github.com/badarealam" target="_blank" class="text-teal-600 hover:underline">https://github.com/badarealam</a>
+                        <span class="text-2xl mr-2">🐙</span> <strong class="font-semibold mr-1">GitHub:</strong> <a href="https://github.com/badarealam" target="_blank" class="text-teal-600 hover:underline break-all">https://github.com/badarealam</a>
                     </li>
-                    
                 </ul>
                 <button id="download-cv-btn" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors">
                     <svg class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -456,7 +412,6 @@
         </div>
     </div>
 
-    <!-- Project Modal (Copied from your project portfolio) -->
     <div id="project-modal" class="modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden">
         <div class="modal-content bg-white rounded-lg shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto transform scale-95">
             <div class="sticky top-0 bg-white p-6 border-b border-slate-200 flex justify-between items-center">
@@ -466,18 +421,19 @@
                 </button>
             </div>
             <div id="modal-body" class="p-8">
-                <!-- Project details will be loaded here -->
-            </div>
+                </div>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
+        // Profile photo data (can be extended if you have multiple photos or descriptions)
         const profilePhotoData = {
             src: './badar_e_alam.png',
             alt: 'Badar e Alam Profile Picture'
         };
 
+        // Project data (updated to only include the first three)
         const projects = [
             {
                 id: 'hydro-turbine',
@@ -486,14 +442,15 @@
                 challenge: 'To create a compact and efficient power generation solution, requiring detailed electronic circuit design and precise mechanical integration within a small form factor.',
                 solution: {
                     hardware: ['TPS63070 (Power Management IC)', 'Custom PCB', 'Mini Turbine Generator', 'Floatation Mechanism'],
-                    software: [],
+                    software: [], // No specific software mentioned for this project, can add if applicable
                 },
                 features: ['Compact & Floatable Design', 'Custom PCB for Power Management (TPS63070)', 'Integrated 3D Enclosure Design', 'Efficient Hydro Power Generation'],
-                techHighlights: ['PCB Design', '3D Design', 'KiCad', 'Fusion 360', 'Hardware'],
+                techHighlights: ['PCB Design: KiCad (Footprint to Schematic)', '3D Design: Fusion 360', 'Power Management: TPS63070', 'Hardware Prototyping'],
                 impact: 'Successfully demonstrated a viable approach to small-scale, portable hydro power, showcasing strong skills in both electrical and mechanical design for embedded applications.',
                 tags: ['PCB Design', '3D Design', 'KiCad', 'Fusion 360', 'Hardware'],
                 media: {
-                    images: ['./hydro_tubine_1.PNG', './hydro_turbine_2.PNG','./hydro_tubine_3.PNG','./hydro_tubine_4.PNG','./hydro_tubine_5.PNG','./hydro_tubine_6.PNG','./hydro_tubine_7.PNG'],
+                    images: ['./hydro_tubine_1.PNG', './hydro_turbine_2.PNG','./hydro_tubine_3.PNG','./hydro_tubine_4.PNG','./hydro_tubine_5.PNG','./hydro_tubine_6.PNG','./hydro_tubine_7.PNG'], // Placeholder images
+                   // videos: ['./videos/hydro_turbine_demo.mp4'] // Placeholder video
                 }
             },
             {
@@ -514,7 +471,8 @@
                 impact: 'Created a practical and cost-effective solution for predictive maintenance in industrial settings, significantly reducing potential equipment failures and operational costs.',
                 tags: ['AI', 'Machine Learning', 'C++', 'C', 'Python', 'Arduino Nano', 'Real-time Systems', 'IoT'],
                 media: {
-                    images: ['./motor_fault_1.PNG', './motor_fault_2.PNG'],
+                    images: ['./motor_fault_1.PNG', './motor_fault_2.PNG'], // Placeholder images
+                    //videos: ['./videos/motor_fault_demo.mp4'] // Placeholder video
                 }
             },
             {
@@ -535,31 +493,40 @@
                 techHighlights: ['Microcontroller: ESP32/Arduino', 'Sensors: Temperature, Moisture, SpO2, Heart Rate', 'Cloud Platform: Firebase/AWS IoT', 'AI/ML: Anomaly Detection, Classification', 'Communication: Wi-Fi/BLE', 'Real-time Data Processing'],
                 impact: 'Created a proactive health monitoring solution capable of providing early warnings for potential health issues, empowering users and healthcare providers with actionable insights for timely intervention.',
                 tags: ['Health Tech', 'IoT', 'AI', 'Machine Learning', 'Sensors', 'Cloud', 'Real-time Systems'],
-                media: {}
+                media: {
+                    //images: ['./health_monitoring_1.jpg', './health_monitoring_2.png'], // Placeholder images
+                    //videos: ['./videos/health_monitoring_demo.mp4'] // Placeholder video
+                }
             }
         ];
 
+        // This function sets up the walking animation for the letters in the welcome message
         function setupWalkingAnimation() {
             const welcomeLetters = document.querySelectorAll('#welcome-animation h1 span');
             welcomeLetters.forEach((span, index) => {
+                // Apply a staggered delay to each letter for the "walking" effect
                 span.style.animationDelay = `${index * 0.15}s`;
             });
         }
 
+        // This function handles the transition from the welcome animation to the main content
         function showMainContent() {
             const welcomeAnimation = document.getElementById('welcome-animation');
             const mainContentWrapper = document.getElementById('main-content-wrapper');
 
+            // Wait for the animation to complete, then start the fade-out
             setTimeout(() => {
                 welcomeAnimation.classList.add('fade-out');
 
+                // After the welcome screen fades, show the main content
                 setTimeout(() => {
                     welcomeAnimation.style.display = 'none';
                     mainContentWrapper.classList.add('show-content');
-                }, 1000);
-            }, 3000);
+                }, 1000); // This delay should match the CSS transition duration for #welcome-animation
+            }, 3000); // This delay allows the walking animation to run for a few seconds
         }
 
+        // Skill tab functionality
         const skillTabsContainer = document.getElementById('skill-tabs');
         const coreSkillsContent = document.getElementById('core-skills');
         const softSkillsContent = document.getElementById('soft-skills');
@@ -614,29 +581,33 @@
         skillTabsContainer.addEventListener('click', (event) => {
             const clickedButton = event.target.closest('.skill-tab');
             if (clickedButton) {
+                // Remove active class from all tabs
                 document.querySelectorAll('.skill-tab').forEach(tab => {
                     tab.classList.remove('active');
                     tab.classList.remove('bg-teal-600', 'text-white');
                     tab.classList.add('bg-white', 'shadow-sm');
                 });
 
+                // Add active class to the clicked tab
                 clickedButton.classList.add('active');
                 clickedButton.classList.remove('bg-white', 'shadow-sm');
                 clickedButton.classList.add('bg-teal-600', 'text-white');
 
+                // Show/hide skill content based on data-skill-type
                 const skillType = clickedButton.dataset.skillType;
                 if (skillType === 'core') {
                     coreSkillsContent.classList.remove('hidden');
                     softSkillsContent.classList.add('hidden');
-                    renderCoreSkills();
+                    renderCoreSkills(); // Re-render to ensure content is there
                 } else if (skillType === 'soft') {
                     softSkillsContent.classList.remove('hidden');
                     coreSkillsContent.classList.add('hidden');
-                    renderSoftSkills();
+                    renderSoftSkills(); // Re-render to ensure content is there
                 }
             }
         });
 
+        // Experience and Education section expand/collapse functionality
         document.addEventListener('click', (event) => {
             const header = event.target.closest('.experience-header') || event.target.closest('.education-header') || event.target.closest('.publication-header');
             if (header) {
@@ -644,17 +615,18 @@
                 const content = document.getElementById(targetId);
                 if (content) {
                     content.classList.toggle('expanded');
-                    header.classList.toggle('expanded');
+                    header.classList.toggle('expanded'); // Toggle class on header for arrow rotation
                 }
             }
         });
 
 
+        // Project rendering and modal functions (adapted from your project portfolio)
         const projectsGrid = document.getElementById('projects-grid');
         const modal = document.getElementById('project-modal');
         const modalTitle = document.getElementById('modal-title');
         const modalBody = document.getElementById('modal-body');
-        const modalCloseBtn = document.getElementById('modal-close-btn');
+        const modalCloseBtn = document.getElementById('modal-close-btn'); // Corrected assignment
 
         function renderProjects() {
             projectsGrid.innerHTML = '';
@@ -711,7 +683,7 @@ Please provide a summary of approximately 100-150 words.`;
 
             let retries = 0;
             const maxRetries = 5;
-            const baseDelay = 1000;
+            const baseDelay = 1000; // 1 second
 
             while (retries < maxRetries) {
                 try {
@@ -722,7 +694,7 @@ Please provide a summary of approximately 100-150 words.`;
                     });
 
                     if (!response.ok) {
-                        if (response.status === 429) {
+                        if (response.status === 429) { // Too Many Requests
                             const delay = baseDelay * Math.pow(2, retries);
                             console.warn(`Rate limit hit. Retrying in ${delay / 1000} seconds...`);
                             await new Promise(resolve => setTimeout(resolve, delay));
@@ -742,11 +714,11 @@ Please provide a summary of approximately 100-150 words.`;
                     } else {
                         summaryContent.innerHTML = '<p class="text-red-500">Failed to generate summary. Unexpected API response.</p>';
                     }
-                    break;
+                    break; // Exit loop on success
                 } catch (error) {
                     console.error('Error calling Gemini API:', error);
                     summaryContent.innerHTML = `<p class="text-red-500">Error generating summary: ${error.message}. Please try again.</p>`;
-                    break;
+                    break; // Exit loop on critical error
                 }
             }
 
@@ -795,7 +767,7 @@ Please provide a summary of approximately 100-150 words.`;
             if (project.media && project.media.videos && project.media.videos.length > 0) {
                 mediaHtml += `<section class="mb-6">
                     <h3 class="text-lg font-semibold border-b border-slate-200 pb-2 mb-3">Project Videos</h3>
-                    <div class="grid grid-cols-1 gap-4">`;
+                    <div class="grid grid-cols-1 gap-4">`; // Use grid for videos too, or just flex-col
                 project.media.videos.forEach(videoSrc => {
                     mediaHtml += `<div class="w-full aspect-video rounded-lg overflow-hidden shadow-md">
                                     <video controls class="w-full h-full"><source src="${videoSrc}" type="video/mp4" onerror="this.onerror=null;this.src='https://placehold.co/640x360/cccccc/333333?text=Video+Not+Found';">Your browser does not support the video tag.</video>
@@ -803,6 +775,7 @@ Please provide a summary of approximately 100-150 words.`;
                 });
                 mediaHtml += `</div></section>`;
             }
+
 
             modalBody.innerHTML = `
                 <section class="mb-6">
@@ -831,8 +804,7 @@ Please provide a summary of approximately 100-150 words.`;
                     <h3 class="text-lg font-semibold border-b border-slate-200 pb-2 mb-3">Outcome and Impact</h3>
                     <p class="text-slate-600">${project.impact}</p>
                 </section>
-                ${mediaHtml}
-                <section class="mb-6">
+                ${mediaHtml} <section class="mb-6">
                     <h3 class="text-lg font-semibold border-b border-slate-200 pb-2 mb-3 flex items-center">
                         AI Summary
                         <button id="summarize-button" class="ml-3 px-3 py-1 bg-teal-500 text-white text-sm font-medium rounded-full hover:bg-teal-600 transition-colors flex items-center">
@@ -884,34 +856,30 @@ Please provide a summary of approximately 100-150 words.`;
             }
         });
 
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const navigationLinks = document.getElementById('navigation-links');
-
-        mobileMenuButton.addEventListener('click', () => {
-            navigationLinks.classList.toggle('hidden');
-            navigationLinks.classList.toggle('flex');
-            navigationLinks.classList.toggle('flex-col');
-        });
-
-        // Close mobile menu when a link is clicked
-        navigationLinks.addEventListener('click', (e) => {
-            if (e.target.tagName === 'A') {
-                navigationLinks.classList.add('hidden');
-                navigationLinks.classList.remove('flex', 'flex-col');
-            }
-        });
-
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Set current year in footer
             document.getElementById('current-year').textContent = new Date().getFullYear();
+
+            // Setup the welcome animation
             setupWalkingAnimation();
+            
+            // Render project cards for the 'Projects' section
             renderProjects();
+
+            // Render core skills (newly added)
             renderCoreSkills();
+            // Initial render for soft skills (hidden by default)
             renderSoftSkills();
+
+            // Start the transition to show the main content
             showMainContent();
+
+            // Add event listener for Download CV button
             document.getElementById('download-cv-btn').addEventListener('click', generateCV);
         });
 
+        // Placeholder function for CV generation
         function generateCV() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
@@ -931,6 +899,7 @@ Please provide a summary of approximately 100-150 words.`;
             doc.text("Electrical Engineer", margin, yPos);
             yPos += lineHeight * 2;
 
+            // Contact Info
             doc.setFontSize(10);
             doc.text(`Email: badar.ee9086@gmail.com`, margin, yPos);
             yPos += lineHeight;
@@ -939,15 +908,17 @@ Please provide a summary of approximately 100-150 words.`;
             doc.text(`GitHub: https://github.com/badarealam`, margin, yPos);
             yPos += sectionSpacing * 2;
 
+            // Helper to add section title
             const addSectionTitle = (title) => {
                 doc.setFont("helvetica", "bold");
                 doc.setFontSize(16);
                 doc.text(title, margin, yPos);
                 yPos += lineHeight;
-                doc.line(margin, yPos, doc.internal.pageSize.width - margin, yPos);
+                doc.line(margin, yPos, doc.internal.pageSize.width - margin, yPos); // Underline
                 yPos += lineHeight;
             };
 
+            // Helper to add text with word wrapping and page breaks
             const addText = (text, isListItem = false) => {
                 const splitText = doc.splitTextToSize(text, doc.internal.pageSize.width - 2 * margin);
                 splitText.forEach(line => {
@@ -960,6 +931,7 @@ Please provide a summary of approximately 100-150 words.`;
                 });
             };
 
+            // About Me
             addSectionTitle("About Me");
             doc.setFont("helvetica", "normal");
             doc.setFontSize(10);
@@ -967,6 +939,7 @@ Please provide a summary of approximately 100-150 words.`;
             addText(document.querySelector('#about p:nth-of-type(2)').textContent);
             yPos += sectionSpacing;
 
+            // Skills & Expertise
             addSectionTitle("Skills & Expertise");
             doc.setFontSize(10);
             addText("Core Competencies:");
@@ -980,6 +953,7 @@ Please provide a summary of approximately 100-150 words.`;
             });
             yPos += sectionSpacing;
 
+            // Professional Experience
             addSectionTitle("Professional Experience");
             doc.setFontSize(10);
             document.querySelectorAll('#experience .experience-item').forEach(item => {
@@ -987,10 +961,11 @@ Please provide a summary of approximately 100-150 words.`;
                 addText(item.querySelector('h3').textContent);
                 doc.setFont("helvetica", "normal");
                 addText(item.querySelector('.experience-content').textContent.trim());
-                yPos += lineHeight;
+                yPos += lineHeight; // Small space between experience items
             });
             yPos += sectionSpacing;
 
+            // Education
             addSectionTitle("Education");
             doc.setFontSize(10);
             document.querySelectorAll('#education .education-item').forEach(item => {
@@ -1002,6 +977,7 @@ Please provide a summary of approximately 100-150 words.`;
             });
             yPos += sectionSpacing;
 
+            // Publications & Thesis
             addSectionTitle("Publications & Thesis");
             doc.setFontSize(10);
             document.querySelectorAll('#publications .publication-item').forEach(item => {
