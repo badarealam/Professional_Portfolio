@@ -11,30 +11,72 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* slate-50 */
-            scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+            background-color: #1e293b; /* slate-900 */
+            color: #e2e8f0; /* slate-200 */
+            scroll-behavior: smooth;
         }
         .section-card {
-            background-color: #ffffff;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            margin-bottom: 2rem;
+            background-color: #2d3846; /* slate-800 with a slight blue tint */
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            position: relative;
+            z-index: 10;
+        }
+        .section-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 0 30px rgba(74, 222, 128, 0.3); /* emerald-400 glow */
+            z-index: -1;
+        }
+        .section-card:hover::before {
+            opacity: 1;
         }
         .skill-tab {
             cursor: pointer;
-            transition: background-color 0.2s ease, color 0.2s ease;
+            transition: all 0.2s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
         .skill-tab.active {
-            background-color: #0d9488; /* teal-600 */
+            background-color: #10b981; /* emerald-500 */
             color: white;
+            transform: scale(1.05) translateZ(10px);
+            box-shadow: 0 8px 15px rgba(16, 185, 129, 0.4);
         }
         .project-card {
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            position: relative;
+        }
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.2); /* emerald-400 glow */
+            z-index: -1;
         }
         .project-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            transform: translateY(-8px) rotateX(2deg) scale(1.02);
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+        }
+        .project-card:hover::before {
+            opacity: 1;
         }
         .modal {
             transition: opacity 0.3s ease;
@@ -47,7 +89,7 @@
             transition: background-color 0.2s ease;
         }
         .tag.active {
-            background-color: #0d9488; /* teal-600 */
+            background-color: #10b981; /* emerald-500 */
             color: white;
         }
 
@@ -58,11 +100,12 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #f8fafc;
+            background-color: #1e293b;
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 60;
+            opacity: 1;
             transition: opacity 1s ease-out;
         }
         #welcome-animation.fade-out {
@@ -71,27 +114,22 @@
         #welcome-animation h1 {
             font-size: 3rem;
             font-weight: 700;
-            color: #1e293b; /* Reverted to solid color */
-            /* Removed gradient properties */
-            background-image: none;
-            -webkit-background-clip: unset;
-            background-clip: unset;
-            color: #1e293b;
+            color: #f1f5f9; /* slate-100 */
         }
         #welcome-animation h1 span {
             display: inline-block;
-            animation: walk 1s ease-in-out infinite;
+            animation: walk 1.5s ease-in-out infinite;
         }
         @keyframes walk {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-15px); }
         }
 
         /* Initial state for main content */
         #main-content-wrapper {
             opacity: 0;
             pointer-events: none;
-            transition: opacity 1s ease-in;
+            transition: opacity 1.5s ease-in;
         }
         #main-content-wrapper.show-content {
             opacity: 1;
@@ -99,16 +137,18 @@
         }
         /* Offset for fixed header when scrolling to anchors */
         html {
-            scroll-padding-top: 64px; /* Adjust this value based on your header's height */
+            scroll-padding-top: 64px;
         }
 
         /* Profile Photo Interactive Styles */
         .profile-photo {
             transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
         .profile-photo:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+            transform: scale(1.08) rotateY(5deg) translateZ(10px);
+            box-shadow: 0 15px 30px -5px rgba(74, 222, 128, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
         }
 
         /* Skill Button Styles */
@@ -117,42 +157,52 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 0.75rem 1rem;
-            background-color: #f0f9ff; /* blue-50 */
-            border: 1px solid #bae6fd; /* blue-200 */
+            padding: 1rem 1.25rem;
+            background-color: #334155; /* slate-700 */
+            border: 1px solid #475569; /* slate-600 */
             border-radius: 0.5rem;
             transition: all 0.2s ease-in-out;
             cursor: pointer;
             text-align: center;
-            min-width: 120px; /* Ensure consistent width */
-            min-height: 80px; /* Ensure consistent height */
+            min-width: 120px;
+            min-height: 80px;
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
         .skill-button:hover {
-            background-color: #bfdbfe; /* blue-200 */
-            border-color: #60a5fa; /* blue-400 */
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            background-color: #475569; /* slate-600 */
+            border-color: #64748b; /* slate-500 */
+            transform: translateY(-5px) translateZ(10px) scale(1.05);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
         }
         .skill-button .skill-icon {
-            font-size: 2rem; /* Larger icon size */
+            font-size: 2rem;
             margin-bottom: 0.25rem;
-            color: #2563eb; /* blue-700 */
+            color: #74e2a8; /* emerald-400 */
         }
         .skill-button .skill-text {
-            font-size: 0.875rem; /* text-sm */
-            font-weight: 500; /* font-medium */
-            color: #1e293b; /* slate-900 */
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #f1f5f9; /* slate-100 */
         }
 
         /* Experience and Education Item Styles */
         .experience-item, .education-item, .publication-item {
-            border: 1px solid #e2e8f0; /* slate-200 */
+            border: 1px solid #334155; /* slate-700 */
+            background-color: #2d3846; /* slightly lighter than body */
             border-radius: 0.5rem;
             margin-bottom: 1rem;
             overflow: hidden;
+            transition: all 0.2s ease-in-out;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        .experience-item:hover, .education-item:hover, .publication-item:hover {
+            transform: translateY(-3px) translateZ(5px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
         }
         .experience-header, .education-header, .publication-header {
-            background-color: #f1f5f9; /* slate-100 */
+            background-color: #334155; /* slate-700 */
             padding: 1rem 1.5rem;
             cursor: pointer;
             display: flex;
@@ -161,13 +211,13 @@
             transition: background-color 0.2s ease;
         }
         .experience-header:hover, .education-header:hover, .publication-header:hover {
-            background-color: #e2e8f0; /* slate-200 */
+            background-color: #475569; /* slate-600 */
         }
         .experience-header h3, .education-header h3, .publication-header h3 {
-            font-size: 1.25rem; /* text-xl */
-            font-weight: 600; /* font-semibold */
-            color: #1e293b; /* slate-800 */
-            margin-bottom: 0; /* Remove default margin */
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #f1f5f9; /* slate-100 */
+            margin-bottom: 0;
         }
         .experience-content, .education-content, .publication-content {
             padding: 0 1.5rem;
@@ -176,7 +226,7 @@
             transition: max-height 0.5s ease-out, padding 0.5s ease-out;
         }
         .experience-content.expanded, .education-content.expanded, .publication-content.expanded {
-            max-height: 1000px; /* Large enough value to show all content */
+            max-height: 1000px;
             padding: 1rem 1.5rem;
         }
         .arrow-icon {
@@ -188,37 +238,44 @@
 
         /* Section Title Styling */
         .section-title-gradient {
-            font-size: 1.875rem; /* text-3xl for mobile */
-            font-weight: 800; /* font-extrabold */
-            line-height: 1.25; /* leading-tight */
-            letter-spacing: -0.025em; /* tracking-tight */
-            filter: drop-shadow(0 4px 3px rgb(0 0 0 / 0.07)) drop-shadow(0 2px 2px rgb(0 0 0 / 0.06)); /* drop-shadow-lg */
-            background-image: linear-gradient(to right, var(--tw-gradient-from, #0d9488), var(--tw-gradient-to, #2563eb));
+            font-size: 1.875rem;
+            font-weight: 800;
+            line-height: 1.25;
+            letter-spacing: -0.025em;
+            filter: drop-shadow(0 4px 3px rgb(0 0 0 / 0.07)) drop-shadow(0 2px 2px rgb(0 0 0 / 0.06));
+            background-image: linear-gradient(to right, #10b981, #3b82f6); /* emerald-500 to blue-500 */
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            --tw-gradient-from: #0d9488; /* teal-500 */
-            --tw-gradient-to: #2563eb; /* blue-600 */
         }
         /* Adjust for larger screens */
-        @media (min-width: 640px) { /* sm breakpoint */
+        @media (min-width: 640px) {
             .section-title-gradient {
-                font-size: 2.25rem; /* sm:text-4xl */
+                font-size: 2.25rem;
             }
         }
-        @media (min-width: 768px) { /* md breakpoint */
+        @media (min-width: 768px) {
             .section-title-gradient {
-                font-size: 2.5rem; /* md:text-5xl */
+                font-size: 2.5rem;
             }
         }
-        @media (min-width: 1024px) { /* lg breakpoint */
+        @media (min-width: 1024px) {
             .section-title-gradient {
-                font-size: 3rem; /* lg:text-6xl */
+                font-size: 3rem;
             }
         }
     </style>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QJH6184429"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-QJH6184429');
+    </script>
 </head>
-<body class="text-slate-800">
+<body class="text-slate-200">
 
     <div id="welcome-animation">
         <h1>
@@ -227,53 +284,53 @@
     </div>
 
     <div id="main-content-wrapper">
-        <nav class="fixed top-0 left-0 right-0 bg-white shadow-md z-50 py-4">
+        <nav class="fixed top-0 left-0 right-0 bg-slate-900 shadow-md z-50 py-4">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-                <a href="#about" class="text-xl font-bold text-slate-900 hover:text-teal-600 transition-colors">Badar e Alam</a>
+                <a href="#about" class="text-xl font-bold text-white hover:text-emerald-500 transition-colors">Badar e Alam</a>
 
-                <button id="mobile-menu-button" class="md:hidden text-slate-700 hover:text-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 rounded-md p-2">
+                <button id="mobile-menu-button" class="md:hidden text-slate-400 hover:text-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded-md p-2">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                 </button>
 
-                <div id="navigation-links" class="hidden md:flex flex-col md:flex-row gap-x-6 gap-y-2 text-slate-700 font-medium absolute md:static top-full left-0 w-full md:w-auto bg-white md:bg-transparent shadow-md md:shadow-none py-4 md:py-0 px-4 md:px-0">
-                    <a href="#about" class="block py-2 md:py-0 hover:text-teal-600 transition-colors">About Me</a>
-                    <a href="#skills" class="block py-2 md:py-0 hover:text-teal-600 transition-colors">Technical Skills</a>
-                    <a href="#projects" class="block py-2 md:py-0 hover:text-teal-600 transition-colors">Projects</a>
-                    <a href="#experience" class="block py-2 md:py-0 hover:text-teal-600 transition-colors">Experience</a>
-                    <a href="#education" class="block py-2 md:py-0 hover:text-teal-600 transition-colors">Education</a>
-                    <a href="#publications" class="block py-2 md:py-0 hover:text-teal-600 transition-colors">Publications & Thesis</a>
-                    <a href="#contact" class="block py-2 md:py-0 hover:text-teal-600 transition-colors">Contact Me</a>
+                <div id="navigation-links" class="hidden md:flex flex-col md:flex-row gap-x-6 gap-y-2 text-slate-400 font-medium absolute md:static top-full left-0 w-full md:w-auto bg-slate-900 md:bg-transparent shadow-md md:shadow-none py-4 md:py-0 px-4 md:px-0">
+                    <a href="#about" class="block py-2 md:py-0 hover:text-emerald-500 transition-colors">About Me</a>
+                    <a href="#skills" class="block py-2 md:py-0 hover:text-emerald-500 transition-colors">Technical Skills</a>
+                    <a href="#projects" class="block py-2 md:py-0 hover:text-emerald-500 transition-colors">Projects</a>
+                    <a href="#experience" class="block py-2 md:py-0 hover:text-emerald-500 transition-colors">Experience</a>
+                    <a href="#education" class="block py-2 md:py-0 hover:text-emerald-500 transition-colors">Education</a>
+                    <a href="#publications" class="block py-2 md:py-0 hover:text-emerald-500 transition-colors">Publications & Thesis</a>
+                    <a href="#contact" class="block py-2 md:py-0 hover:text-emerald-500 transition-colors">Contact Me</a>
                 </div>
             </div>
         </nav>
 
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 max-w-6xl pt-20"> <header class="text-center mb-12 mt-8"> <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight tracking-tight drop-shadow-lg">
-                    <span class="bg-gradient-to-r from-teal-500 to-blue-600 text-transparent bg-clip-text">My Professional Portfolio</span>
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 max-w-6xl pt-20"> <header class="text-center mb-12 mt-8"> <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight tracking-tight drop-shadow-lg">
+                    <span class="bg-gradient-to-r from-emerald-500 to-blue-500 text-transparent bg-clip-text">My Professional Portfolio</span>
                 </h1>
                 </header>
 
             <section id="about" class="section-card text-center">
                 <h2 class="section-title-gradient text-center mb-4">About Me</h2>
                 <div class="flex flex-col items-center mb-6">
-                    <img id="profile-img" src="./badar_e_alam.png" alt="Badar e Alam Profile" class="profile-photo w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-teal-500 shadow-lg mb-4 cursor-pointer">
-                    <h3 class="text-2xl font-semibold text-slate-900">Badar e Alam</h3>
-                    <p class="text-slate-600">Electrical Engineer</p>
+                    <img id="profile-img" src="./badar_e_alam.png" alt="Badar e Alam Profile" class="profile-photo w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-emerald-500 shadow-lg mb-4 cursor-pointer">
+                    <h3 class="text-2xl font-semibold text-white">Badar e Alam</h3>
+                    <p class="text-slate-400">Electrical Engineer</p>
                 </div>
-                <p class="text-slate-700 leading-relaxed text-left md:text-center">
+                <p class="text-slate-300 leading-relaxed text-left md:text-center">
                     I am an Electrical Engineer currently pursuing a Master's degree in Electrical and Electronic Engineering from Ghulam Ishaq Khan Institute. With experience across multidisciplinary domains, I have developed a diverse set of technical and design skills. I am particularly motivated by research and lab-based environments that encourage innovation, hands-on experimentation, and problem-solving. I actively seek opportunities to contribute to meaningful projects, explore emerging technologies, and grow through collaborative work.
                 </p>
-                <p class="text-slate-700 leading-relaxed mt-4 text-left md:text-center">
+                <p class="text-slate-300 leading-relaxed mt-4 text-left md:text-center">
                     I am open to research collaborations,  projects, and engineering challenges where I can apply my skills and continue learning. My goal is to make a positive impact through engineering—whether in research, product development, or practical applications.
                 </p>
             </section>
 
             <section id="skills" class="section-card">
                 <h2 class="section-title-gradient text-center mb-4">Skills & Expertise</h2>
-                <p class="text-slate-700 mb-6">My technical skill set is comprehensive, covering various aspects of embedded systems, electronics, software development, and project management.</p>
+                <p class="text-slate-300 mb-6">My technical skill set is comprehensive, covering various aspects of embedded systems, electronics, software development, and project management.</p>
 
-                <div class="flex flex-wrap justify-center gap-2 mb-6" id="skill-tabs">
-                    <button class="skill-tab px-4 py-2 rounded-full bg-white shadow-sm active" data-skill-type="core">Core Competencies</button>
-                    <button class="skill-tab px-4 py-2 rounded-full bg-white shadow-sm" data-skill-type="soft">Soft Skills</button>
+                <div class="flex flex-wrap justify-center gap-4 mb-6" id="skill-tabs">
+                    <button class="skill-tab px-4 py-2 rounded-full bg-slate-800 border border-slate-700 shadow-md active" data-skill-type="core">Core Competencies</button>
+                    <button class="skill-tab px-4 py-2 rounded-full bg-slate-800 border border-slate-700 shadow-md" data-skill-type="soft">Soft Skills</button>
                 </div>
 
                 <div id="core-skills" class="skill-content grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -285,7 +342,7 @@
 
             <section id="projects" class="section-card">
                 <h2 class="section-title-gradient text-center mb-4">Featured Projects</h2>
-                <p class="text-slate-700 mb-6">
+                <p class="text-slate-300 mb-6">
                     My portfolio includes a range of projects that demonstrate my practical application of the skills listed above. Click on any project card to view detailed descriptions, images, videos, and an AI-generated summary.
                 </p>
                 <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -294,28 +351,28 @@
 
             <section id="experience" class="section-card">
                 <h2 class="section-title-gradient text-center mb-4">Professional Experience</h2>
-                <p class="text-slate-700 mb-6">A summary of my professional journey and key contributions.</p>
+                <p class="text-slate-300 mb-6">A summary of my professional journey and key contributions.</p>
 
                 <div class="experience-item">
                     <div class="experience-header" data-target="zatnav-details">
-                        <h3 class="text-xl font-semibold text-slate-800">Internship at Zatnav Islamabad | 07/2023 – 09/2023</h3>
-                        <svg class="w-6 h-6 text-slate-500 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        <h3 class="text-xl font-semibold text-white">Internship at Zatnav Islamabad | 07/2023 – 09/2023</h3>
+                        <svg class="w-6 h-6 text-slate-400 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </div>
                     <div id="zatnav-details" class="experience-content">
-                        <p class="text-slate-700 mt-2">During my internship at Zatnav Islamabad, I gained hands-on experience in AI and sensor integration work. My responsibilities included data analysis with pandas, building machine learning models, sensor interfacing, sensor calibration, sensor coding, and integrating the overall system.</p>
+                        <p class="text-slate-300 mt-2">During my internship at Zatnav Islamabad, I gained hands-on experience in AI and sensor integration work. My responsibilities included data analysis with pandas, building machine learning models, sensor interfacing, sensor calibration, sensor coding, and integrating the overall system.</p>
                     </div>
                 </div>
 
                 <div class="experience-item">
                     <div class="experience-header" data-target="wingmen-details">
-                        <h3 class="text-xl font-semibold text-slate-800">Co-Founded Wingmen Technologies | 2022 – 2024</h3>
-                        <svg class="w-6 h-6 text-slate-500 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        <h3 class="text-xl font-semibold text-white">Co-Founded Wingmen Technologies | 2022 – 2024</h3>
+                        <svg class="w-6 h-6 text-slate-400 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </div>
                     <div id="wingmen-details" class="experience-content">
-                        <p class="text-slate-700 mt-2">As a co-founder of Wingmen Technologies, I collaborated with local businesses and institutions to solve their unique problems through innovative tech solutions. Key projects include:</p>
+                        <p class="text-slate-300 mt-2">As a co-founder of Wingmen Technologies, I collaborated with local businesses and institutions to solve their unique problems through innovative tech solutions. Key projects include:</p>
 
-                        <h4 class="text-lg font-semibold text-slate-800 mt-4 mb-2">IOT Based Automatic Waste Segregation System (01/2023 – 05/2023)</h4>
-                        <ul class="list-disc list-inside space-y-1 text-slate-700">
+                        <h4 class="text-lg font-semibold text-white mt-4 mb-2">IOT Based Automatic Waste Segregation System (01/2023 – 05/2023)</h4>
+                        <ul class="list-disc list-inside space-y-1 text-slate-300">
                             <li>Developed an IoT-integrated AI system for automated waste classification using advanced image processing and machine learning techniques.</li>
                             <li>Implemented a Raspberry Pi-controlled mechanical sorting mechanism for precise waste segregation into designated bins.</li>
                             <li>Integrated real-time monitoring and alerts via IoT and IR sensors for efficient bin fill-level tracking and timely waste removal.</li>
@@ -323,8 +380,8 @@
                             <li>Achieved high accuracy and resource efficiency by automating the waste sorting process, reducing manual intervention and human error.</li>
                         </ul>
 
-                        <h4 class="text-lg font-semibold text-slate-800 mt-4 mb-2">Portable Health Monitoring Device (08/2023 – 12/2023)</h4>
-                        <ul class="list-disc list-inside space-y-1 text-slate-700">
+                        <h4 class="text-lg font-semibold text-white mt-4 mb-2">Portable Health Monitoring Device (08/2023 – 12/2023)</h4>
+                        <ul class="list-disc list-inside space-y-1 text-slate-300">
                             <li>Designed a portable health monitoring device for sensor data collection (heart-beat, Temperature, Oxygen saturation, body moisture).</li>
                             <li>Implemented data transmission to the cloud for remote monitoring.</li>
                             <li>Integrated AI algorithms for real-time anomaly detection in heart-beat and oxygen saturation levels.</li>
@@ -336,17 +393,17 @@
 
             <section id="education" class="section-card">
                 <h2 class="section-title-gradient text-center mb-4">Education</h2>
-                <p class="text-slate-700 mb-6">My academic background and relevant qualifications.</p>
+                <p class="text-slate-300 mb-6">My academic background and relevant qualifications.</p>
 
                 <div class="education-item">
                     <div class="education-header" data-target="bs-details">
-                        <h3 class="text-xl font-semibold text-slate-800">BS Electrical Engineering</h3>
-                        <svg class="w-6 h-6 text-slate-500 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        <h3 class="text-xl font-semibold text-white">BS Electrical Engineering</h3>
+                        <svg class="w-6 h-6 text-slate-400 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </div>
                     <div id="bs-details" class="education-content">
-                        <p class="text-slate-700 mt-1">International Islamic University, Islamabad | Islamabad, Pakistan</p>
-                        <p class="text-slate-700 mt-1">Graduated: August 2024 | CGPA: 3.4</p>
-                        <ul class="list-disc list-inside space-y-1 text-slate-700 mt-2">
+                        <p class="text-slate-300 mt-1">International Islamic University, Islamabad | Islamabad, Pakistan</p>
+                        <p class="text-slate-300 mt-1">Graduated: August 2024 | CGPA: 3.4</p>
+                        <ul class="list-disc list-inside space-y-1 text-slate-300 mt-2">
                             <li>BS Thesis: AI-based Industrial Motor Fault Prediction System in Realtime</li>
                         </ul>
                     </div>
@@ -354,29 +411,29 @@
 
                 <div class="education-item">
                     <div class="education-header" data-target="ms-details">
-                        <h3 class="text-xl font-semibold text-slate-800">Masters in Electrical Engineering (Ongoing)</h3>
-                        <svg class="w-6 h-6 text-slate-500 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        <h3 class="text-xl font-semibold text-white">Masters in Electrical Engineering (Ongoing)</h3>
+                        <svg class="w-6 h-6 text-slate-400 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </div>
                     <div id="ms-details" class="education-content">
-                        <p class="text-slate-700 mt-1">Ghulam Ishaq Khan Institute | Topi, Pakistan</p>
+                        <p class="text-slate-300 mt-1">Ghulam Ishaq Khan Institute | Topi, Pakistan</p>
                     </div>
                 </div>
                 </section>
 
             <section id="publications" class="section-card">
                 <h2 class="section-title-gradient text-center mb-4">Publications & Thesis</h2>
-                <p class="text-slate-700 mb-6">Here you can find my academic publications and thesis work.</p>
+                <p class="text-slate-300 mb-6">Here you can find my academic publications and thesis work.</p>
 
                 <div class="publication-item">
                     <div class="publication-header" data-target="bs-thesis-pub">
-                        <h3 class="text-xl font-semibold text-slate-800">BS Thesis: AI-based Industrial Motor Fault Prediction System in Realtime</h3>
-                        <svg class="w-6 h-6 text-slate-500 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        <h3 class="text-xl font-semibold text-white">BS Thesis: AI-based Industrial Motor Fault Prediction System in Realtime</h3>
+                        <svg class="w-6 h-6 text-slate-400 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </div>
                     <div id="bs-thesis-pub" class="publication-content">
-                        <p class="text-slate-700 mt-2">University: International Islamic University, Islamabad</p>
-                        <p class="text-slate-700">Year: 2024</p>
-                        <p class="text-slate-700 mt-2">This thesis focuses on developing a real-time AI-driven system for predicting industrial motor faults. It covers data analysis, machine learning model building, sensor interfacing, calibration, coding, and system integration to enable early fault detection.</p>
-                        <a href="./bs_thesis.pdf" target="_blank" class="inline-flex items-center text-teal-600 hover:underline mt-3">
+                        <p class="text-slate-300 mt-2">University: International Islamic University, Islamabad</p>
+                        <p class="text-slate-300">Year: 2024</p>
+                        <p class="text-slate-300 mt-2">This thesis focuses on developing a real-time AI-driven system for predicting industrial motor faults. It covers data analysis, machine learning model building, sensor interfacing, calibration, coding, and system integration to enable early fault detection.</p>
+                        <a href="./bs_thesis.pdf" target="_blank" class="inline-flex items-center text-emerald-500 hover:underline mt-3">
                             <span class="text-2xl mr-2">📄</span> View PDF
                         </a>
                     </div>
@@ -386,19 +443,19 @@
 
             <section id="contact" class="section-card flex flex-col items-center">
                 <h2 class="section-title-gradient text-center mb-4">Contact Me</h2>
-                <p class="text-slate-700 mb-6 text-center">I am always open to discussing new opportunities and collaborations. Please feel free to connect with me:</p>
-                <ul class="space-y-3 text-slate-700 mb-6">
+                <p class="text-slate-300 mb-6 text-center">I am always open to discussing new opportunities and collaborations. Please feel free to connect with me:</p>
+                <ul class="space-y-3 text-slate-300 mb-6">
                     <li class="flex items-center">
-                        <span class="text-2xl mr-2">📧</span> <strong class="font-semibold mr-1">Email:</strong> <a href="mailto:badar.ee9086@gmail.com" class="text-teal-600 hover:underline break-all">badar.ee9086@gmail.com</a>
+                        <span class="text-2xl mr-2">📧</span> <strong class="font-semibold mr-1">Email:</strong> <a href="mailto:badar.ee9086@gmail.com" class="text-emerald-500 hover:underline break-all">badar.ee9086@gmail.com</a>
                     </li>
                     <li class="flex items-center">
-                        <span class="text-2xl mr-2">🔗</span> <strong class="font-semibold mr-1">LinkedIn:</strong> <a href="https://www.linkedin.com/in/badarealam/" target="_blank" class="text-teal-600 hover:underline break-all">https://www.linkedin.com/in/badarealam/</a>
+                        <span class="text-2xl mr-2">🔗</span> <strong class="font-semibold mr-1">LinkedIn:</strong> <a href="https://www.linkedin.com/in/badarealam/" target="_blank" class="text-emerald-500 hover:underline break-all">https://www.linkedin.com/in/badarealam/</a>
                     </li>
                     <li class="flex items-center">
-                        <span class="text-2xl mr-2">🐙</span> <strong class="font-semibold mr-1">GitHub:</strong> <a href="https://github.com/badarealam" target="_blank" class="text-teal-600 hover:underline break-all">https://github.com/badarealam</a>
+                        <span class="text-2xl mr-2">🐙</span> <strong class="font-semibold mr-1">GitHub:</strong> <a href="https://github.com/badarealam" target="_blank" class="text-emerald-500 hover:underline break-all">https://github.com/badarealam</a>
                     </li>
                 </ul>
-                <button id="download-cv-btn" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors">
+                <button id="download-cv-btn" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors">
                     <svg class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd" d="M.5 8a.5.5 0 01.5.5v1.5a.5.5 0 00.5.5h14a.5.5 0 00.5-.5V8.5a.5.5 0 011 0v1.5a1.5 1.5 0 01-1.5 1.5h-14A1.5 1.5 0 010 10V8.5a.5.5 0 01.5-.5zM12 3.5a.5.5 0 01.5.5v3.793l1.146-1.147a.5.5 0 01.708.708l-2 2a.5.5 0 01-.708 0l-2-2a.5.5 0 01.708-.708L11.5 7.793V4a.5.5 0 01.5-.5z" clip-rule="evenodd" />
                     </svg>
@@ -413,10 +470,10 @@
     </div>
 
     <div id="project-modal" class="modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden">
-        <div class="modal-content bg-white rounded-lg shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto transform scale-95">
-            <div class="sticky top-0 bg-white p-6 border-b border-slate-200 flex justify-between items-center">
-                <h2 id="modal-title" class="text-2xl font-bold text-slate-900"></h2>
-                <button id="modal-close-btn" class="text-slate-500 hover:text-slate-800 transition-colors">
+        <div class="modal-content bg-slate-800 rounded-lg shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto transform scale-95">
+            <div class="sticky top-0 bg-slate-800 p-6 border-b border-slate-700 flex justify-between items-center">
+                <h2 id="modal-title" class="text-2xl font-bold text-white"></h2>
+                <button id="modal-close-btn" class="text-slate-400 hover:text-white transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
@@ -467,7 +524,7 @@
                     ]
                 },
                 features: ['Real-time Fault Prediction', 'AI/Machine Learning Integration', 'Microcontroller-Based Solution', 'Early Anomaly Detection', 'Optimized for Industrial Use', 'Low-Cost Implementation'],
-                techHighlights: ['Languages: C++', 'C', 'Python', 'AI/ML: Machine Learning, Anomaly Detection', 'Microcontroller: Arduino Nano', 'Real-time Systems', 'Sensor Integration'],
+                techHighlights: ['Languages: C++', 'C', 'Python', 'AI/ML: Machine Learning, Anomaly Detection', 'Microcontroller: Arduino Nano', 'Real-time Systems', 'IoT'],
                 impact: 'Created a practical and cost-effective solution for predictive maintenance in industrial settings, significantly reducing potential equipment failures and operational costs.',
                 tags: ['AI', 'Machine Learning', 'C++', 'C', 'Python', 'Arduino Nano', 'Real-time Systems', 'IoT'],
                 media: {
@@ -494,7 +551,7 @@
                 impact: 'Created a proactive health monitoring solution capable of providing early warnings for potential health issues, empowering users and healthcare providers with actionable insights for timely intervention.',
                 tags: ['Health Tech', 'IoT', 'AI', 'Machine Learning', 'Sensors', 'Cloud', 'Real-time Systems'],
                 media: {
-                    //images: ['./health_monitoring_1.jpg', './health_monitoring_2.png'], // Placeholder images
+                    images: ['./medicAI.jpeg', './medicAI2.jpeg'], // Placeholder images
                     //videos: ['./videos/health_monitoring_demo.mp4'] // Placeholder video
                 }
             }
@@ -514,8 +571,9 @@
             const welcomeAnimation = document.getElementById('welcome-animation');
             const mainContentWrapper = document.getElementById('main-content-wrapper');
 
-            // Wait for the animation to complete, then start the fade-out
+            // Wait for the animation to complete
             setTimeout(() => {
+                // Start the fade-out
                 welcomeAnimation.classList.add('fade-out');
 
                 // After the welcome screen fades, show the main content
@@ -584,14 +642,14 @@
                 // Remove active class from all tabs
                 document.querySelectorAll('.skill-tab').forEach(tab => {
                     tab.classList.remove('active');
-                    tab.classList.remove('bg-teal-600', 'text-white');
-                    tab.classList.add('bg-white', 'shadow-sm');
+                    tab.classList.remove('bg-emerald-500', 'text-white');
+                    tab.classList.add('bg-slate-800', 'border', 'border-slate-700', 'shadow-md');
                 });
 
                 // Add active class to the clicked tab
                 clickedButton.classList.add('active');
-                clickedButton.classList.remove('bg-white', 'shadow-sm');
-                clickedButton.classList.add('bg-teal-600', 'text-white');
+                clickedButton.classList.remove('bg-slate-800', 'border', 'border-slate-700', 'shadow-md');
+                clickedButton.classList.add('bg-emerald-500', 'text-white');
 
                 // Show/hide skill content based on data-skill-type
                 const skillType = clickedButton.dataset.skillType;
@@ -626,21 +684,21 @@
         const modal = document.getElementById('project-modal');
         const modalTitle = document.getElementById('modal-title');
         const modalBody = document.getElementById('modal-body');
-        const modalCloseBtn = document.getElementById('modal-close-btn'); // Corrected assignment
+        const modalCloseBtn = document.getElementById('modal-close-btn');
 
         function renderProjects() {
             projectsGrid.innerHTML = '';
             projects.forEach(project => {
                 const card = document.createElement('div');
-                card.className = 'project-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer';
+                card.className = 'project-card bg-slate-800 rounded-lg shadow-md overflow-hidden cursor-pointer';
                 card.dataset.projectId = project.id;
 
-                let tagsHtml = project.tags.map(tag => `<span class="inline-block bg-slate-200 text-slate-700 text-xs font-medium mr-2 mb-2 px-2.5 py-0.5 rounded-full">${tag}</span>`).join('');
+                let tagsHtml = project.tags.map(tag => `<span class="inline-block bg-slate-700 text-slate-300 text-xs font-medium mr-2 mb-2 px-2.5 py-0.5 rounded-full">${tag}</span>`).join('');
 
                 card.innerHTML = `
                     <div class="p-6">
-                        <h3 class="text-xl font-bold text-slate-900 mb-2">${project.title}</h3>
-                        <p class="text-slate-600 mb-4 text-sm">${project.overview}</p>
+                        <h3 class="text-xl font-bold text-white mb-2">${project.title}</h3>
+                        <p class="text-slate-400 mb-4 text-sm">${project.overview}</p>
                         <div class="flex flex-wrap">
                             ${tagsHtml}
                         </div>
@@ -657,7 +715,7 @@
 
             if (!summaryContainer || !summaryContent || !summarizeButton) return;
 
-            summaryContent.innerHTML = '<div class="text-slate-500">Generating summary...</div>';
+            summaryContent.innerHTML = '<div class="text-slate-400">Generating summary...</div>';
             summarizeButton.disabled = true;
             summarizeButton.classList.add('opacity-50', 'cursor-not-allowed');
 
@@ -710,7 +768,7 @@ Please provide a summary of approximately 100-150 words.`;
                         result.candidates[0].content && result.candidates[0].content.parts &&
                         result.candidates[0].content.parts.length > 0) {
                         const text = result.candidates[0].content.parts[0].text;
-                        summaryContent.innerHTML = `<p class="text-slate-700">${text}</p>`;
+                        summaryContent.innerHTML = `<p class="text-slate-300">${text}</p>`;
                     } else {
                         summaryContent.innerHTML = '<p class="text-red-500">Failed to generate summary. Unexpected API response.</p>';
                     }
@@ -738,26 +796,26 @@ Please provide a summary of approximately 100-150 words.`;
 
             let solutionHtml = '<div class="grid md:grid-cols-2 gap-6">';
             if (project.solution.hardware && project.solution.hardware.length > 0) {
-                solutionHtml += `<div><h4 class="font-semibold text-slate-800 mb-2">Hardware Components</h4><ul class="list-disc list-inside space-y-1 text-slate-600">`;
+                solutionHtml += `<div><h4 class="font-semibold text-white mb-2">Hardware Components</h4><ul class="list-disc list-inside space-y-1 text-slate-300">`;
                 project.solution.hardware.forEach(item => { solutionHtml += `<li>${item}</li>`; });
                 solutionHtml += `</ul></div>`;
             }
             if (project.solution.software && project.solution.software.length > 0) {
-                solutionHtml += `<div><h4 class="font-semibold text-slate-800 mb-2">Software Architecture</h4><div class="space-y-3">`;
+                solutionHtml += `<div><h4 class="font-semibold text-white mb-2">Software Architecture</h4><div class="space-y-3">`;
                 project.solution.software.forEach(item => {
-                    solutionHtml += `<div><p class="font-medium text-slate-700">${item.title}</p><p class="text-sm text-slate-600">${item.details}</p></div>`;
+                    solutionHtml += `<div><p class="font-medium text-slate-300">${item.title}</p><p class="text-sm text-slate-400">${item.details}</p></div>`;
                 });
                 solutionHtml += `</div></div>`;
             }
             solutionHtml += '</div>';
 
             let featuresHtml = project.features.map(f => `<li>${f}</li>`).join('');
-            let techHighlightsHtml = project.techHighlights.map(th => `<span class="inline-block bg-teal-100 text-teal-800 text-sm font-medium mr-2 mb-2 px-3 py-1 rounded-full">${th}</span>`).join('');
+            let techHighlightsHtml = project.techHighlights.map(th => `<span class="inline-block bg-emerald-900 text-emerald-300 text-sm font-medium mr-2 mb-2 px-3 py-1 rounded-full">${th}</span>`).join('');
 
             let mediaHtml = '';
             if (project.media && project.media.images && project.media.images.length > 0) {
                 mediaHtml += `<section class="mb-6">
-                    <h3 class="text-lg font-semibold border-b border-slate-200 pb-2 mb-3">Project Images</h3>
+                    <h3 class="text-lg font-semibold border-b border-slate-700 pb-2 mb-3">Project Images</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">`;
                 project.media.images.forEach(imgSrc => {
                     mediaHtml += `<img src="${imgSrc}" alt="${project.title} Image" class="rounded-lg shadow-md w-full h-auto object-cover">`;
@@ -766,11 +824,11 @@ Please provide a summary of approximately 100-150 words.`;
             }
             if (project.media && project.media.videos && project.media.videos.length > 0) {
                 mediaHtml += `<section class="mb-6">
-                    <h3 class="text-lg font-semibold border-b border-slate-200 pb-2 mb-3">Project Videos</h3>
-                    <div class="grid grid-cols-1 gap-4">`; // Use grid for videos too, or just flex-col
+                    <h3 class="text-lg font-semibold border-b border-slate-700 pb-2 mb-3">Project Videos</h3>
+                    <div class="grid grid-cols-1 gap-4">`;
                 project.media.videos.forEach(videoSrc => {
                     mediaHtml += `<div class="w-full aspect-video rounded-lg overflow-hidden shadow-md">
-                                    <video controls class="w-full h-full"><source src="${videoSrc}" type="video/mp4" onerror="this.onerror=null;this.src='https://placehold.co/640x360/cccccc/333333?text=Video+Not+Found';">Your browser does not support the video tag.</video>
+                                    <video controls class="w-full h-full"><source src="${videoSrc}" type="video/mp4" onerror="this.onerror=null;this.src='https://placehold.co/640x360/cccccc/333333?text=Video+Not+Found';">Your browser does not support the video tag. I am a helpful Assistant, I will help you with your query.</video>
                                   </div>`;
                 });
                 mediaHtml += `</div></section>`;
@@ -779,40 +837,40 @@ Please provide a summary of approximately 100-150 words.`;
 
             modalBody.innerHTML = `
                 <section class="mb-6">
-                    <h3 class="text-lg font-semibold border-b border-slate-200 pb-2 mb-3">Project Overview</h3>
-                    <p class="text-slate-600">${project.overview}</p>
+                    <h3 class="text-lg font-semibold border-b border-slate-700 pb-2 mb-3">Project Overview</h3>
+                    <p class="text-slate-300">${project.overview}</p>
                 </section>
                 <section class="mb-6">
-                    <h3 class="text-lg font-semibold border-b border-slate-200 pb-2 mb-3">The Challenge</h3>
-                    <p class="text-slate-600">${project.challenge}</p>
+                    <h3 class="text-lg font-semibold border-b border-slate-700 pb-2 mb-3">The Challenge</h3>
+                    <p class="text-slate-300">${project.challenge}</p>
                 </section>
                 <section class="mb-6">
-                    <h3 class="text-lg font-semibold border-b border-slate-200 pb-2 mb-3">Solution and Implementation</h3>
+                    <h3 class="text-lg font-semibold border-b border-slate-700 pb-2 mb-3">Solution and Implementation</h3>
                     ${solutionHtml}
                 </section>
                 <section class="mb-6">
-                    <h3 class="text-lg font-semibold border-b border-slate-200 pb-2 mb-3">Key Features</h3>
-                    <ul class="list-disc list-inside space-y-1 text-slate-600 grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+                    <h3 class="text-lg font-semibold border-b border-slate-700 pb-2 mb-3">Key Features</h3>
+                    <ul class="list-disc list-inside space-y-1 text-slate-300 grid grid-cols-1 sm:grid-cols-2 gap-x-4">
                         ${featuresHtml}
                     </ul>
                 </section>
                 <section class="mb-6">
-                    <h3 class="text-lg font-semibold border-b border-slate-200 pb-2 mb-3">Technical Highlights</h3>
+                    <h3 class="text-lg font-semibold border-b border-slate-700 pb-2 mb-3">Technical Highlights</h3>
                     <div class="flex flex-wrap">${techHighlightsHtml}</div>
                 </section>
                 <section class="mb-6">
-                    <h3 class="text-lg font-semibold border-b border-slate-200 pb-2 mb-3">Outcome and Impact</h3>
-                    <p class="text-slate-600">${project.impact}</p>
+                    <h3 class="text-lg font-semibold border-b border-slate-700 pb-2 mb-3">Outcome and Impact</h3>
+                    <p class="text-slate-300">${project.impact}</p>
                 </section>
                 ${mediaHtml} <section class="mb-6">
-                    <h3 class="text-lg font-semibold border-b border-slate-200 pb-2 mb-3 flex items-center">
+                    <h3 class="text-lg font-semibold border-b border-slate-700 pb-2 mb-3 flex items-center">
                         AI Summary
-                        <button id="summarize-button" class="ml-3 px-3 py-1 bg-teal-500 text-white text-sm font-medium rounded-full hover:bg-teal-600 transition-colors flex items-center">
+                        <button id="summarize-button" class="ml-3 px-3 py-1 bg-emerald-500 text-white text-sm font-medium rounded-full hover:bg-emerald-600 transition-colors flex items-center">
                             Generate AI Summary ✨
                         </button>
                     </h3>
-                    <div id="ai-summary-container" class="mt-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
-                        <div id="ai-summary-content" class="text-slate-600 italic">Click "Generate AI Summary ✨" to get a concise overview of this project.</div>
+                    <div id="ai-summary-container" class="mt-4 p-4 bg-slate-700 rounded-lg border border-slate-600">
+                        <div id="ai-summary-content" class="text-slate-400 italic">Click "Generate AI Summary ✨" to get a concise overview of this project.</div>
                     </div>
                 </section>
             `;
@@ -1002,6 +1060,3 @@ Please provide a summary of approximately 100-150 words.`;
     </script>
 </body>
 </html>
-
-
-
